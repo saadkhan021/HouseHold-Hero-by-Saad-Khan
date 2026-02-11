@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HouseHold Hero - Home Services Simplified</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #f9fbfd;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            background: linear-gradient(135deg, #0062cc 0%, #0096ff 100%);
+            color: white;
+            padding: 120px 0 80px 0;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            position: relative;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* --- STATS COUNTER --- */
+        .stats-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0062cc;
+        }
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* --- CARDS (Seeker/Provider) --- */
+        .role-card {
+            border: none;
+            border-radius: 20px;
+            transition: 0.3s;
+            background: white;
+            height: 100%;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .icon-box-lg {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* --- SECTIONS COMMON --- */
+        .section-padding {
+            padding: 80px 0;
+        }
+        .section-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .section-line {
+            width: 60px;
+            height: 4px;
+            background: #0062cc;
+            margin: 0 auto 50px auto;
+            border-radius: 2px;
+        }
+
+        /* --- HOW IT WORKS --- */
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            background: #e3f2fd;
+            color: #0062cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin: 0 auto 20px auto;
+        }
+
+        /* --- TESTIMONIALS --- */
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #0062cc;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #212529;
+            color: #aaa;
+            padding: 60px 0 20px 0;
+        }
+        .footer-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .footer-link {
+            color: #aaa;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        .footer-link:hover {
+            color: white;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(90deg, #0062cc, #0096ff); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="/">
+                <i class="fas fa-hammer"></i> HouseHold Hero
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                
+                <div class="offcanvas-header bg-primary text-white">
+                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">
+                        <i class="fas fa-bars me-2"></i> Menu
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link active fw-bold mx-2" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold mx-2" href="/about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold mx-2" href="/contact">Contact Us</a>
+                        </li>
+                        <li class="nav-item d-lg-none w-100 my-2"><hr></li>
+                    </ul>
+                    
+                    <div class="d-flex justify-content-center">
+                        <a href="/login" class="btn btn-light text-primary rounded-pill px-4 fw-bold shadow-sm me-2">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="/signup" class="btn btn-outline-light rounded-pill px-4 fw-bold">
+                            Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    ```
+    <section class="hero-section text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="hero-title">Find Trusted Professionals for Every Home Need</h1>
+                    <p class="hero-subtitle">
+                        From AC repair to plumbing, connect with verified experts instantly. 
+                        Safe, secure, and hassle-free services at your doorstep.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="#get-started" class="btn btn-light text-primary btn-lg rounded-pill px-5 fw-bold shadow">Get Started</a>
+                        <a href="#how-it-works" class="btn btn-outline-light btn-lg rounded-pill px-5 fw-bold">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="stats-box">
+                    <div class="row text-center">
+                        <div class="col-md-4 border-end">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Verified Providers</div>
+                        </div>
+                        <div class="col-md-4 border-end">
+                            <div class="stat-number">1,200+</div>
+                            <div class="stat-label">Happy Customers</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-number">4.8</div>
+                            <div class="stat-label">     Rating ⭐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="get-started" class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Who Are You?</h2>
+                <div class="section-line"></div>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-5">
+                    <div class="role-card p-5 text-center">
+                        <div class="icon-box-lg bg-primary text-white mx-auto">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">I Need a Service</h3>
+                        <p class="text-muted mb-4">
+                            Find electricians, plumbers, and technicians near you. View ratings, read reviews, and hire directly via WhatsApp.
+                        </p>
+                        <a href="/signup" class="btn btn-primary rounded-pill w-100 py-3 fw-bold">Find a Pro</a>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="role-card p-5 text-center">
+                        <div class="icon-box-lg bg-success text-white mx-auto">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">I Want to Work</h3>
+                        <p class="text-muted mb-4">
+                            Create your digital profile, showcase your skills, get verified, and receive direct orders from customers. No commission!
+                        </p>
+                        <a href="/signup" class="btn btn-success rounded-pill w-100 py-3 fw-bold">Join as Provider</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="section-padding bg-white">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">How It Works</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="row text-center g-4">
+                <div class="col-md-4">
+                    <div class="step-circle">1</div>
+                    <h4 class="fw-bold">Search</h4>
+                    <p class="text-muted">Select the service you need (Electrician, Plumber, etc.) and browse top-rated profiles.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-circle">2</div>
+                    <h4 class="fw-bold">Review</h4>
+                    <p class="text-muted">Check their location, star ratings, and verification status to ensure safety.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-circle">3</div>
+                    <h4 class="fw-bold">Connect</h4>
+                    <p class="text-muted">Click the WhatsApp button to chat directly and fix the price. No middleman!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background-color: #f1f5f9;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop" 
+                         class="img-fluid rounded-4 shadow-lg" 
+                         alt="Professional Electrician"
+                         style="object-fit: cover; height: 400px; width: 100%;">
+                </div>
+                <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
+                    <h2 class="fw-bold mb-4">Why Choose HouseHold Hero?</h2>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="me-3"><i class="fas fa-check-circle fa-2x text-primary"></i></div>
+                        <div>
+                            <h5 class="fw-bold">Verified Professionals</h5>
+                            <p class="text-muted">We verify CNICs to ensure your safety and trust.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex mb-4">
+                        <div class="me-3"><i class="fas fa-star fa-2x text-warning"></i></div>
+                        <div>
+                            <h5 class="fw-bold">Community Ratings</h5>
+                            <p class="text-muted">Hire based on real feedback from other users.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="me-3"><i class="fab fa-whatsapp fa-2x text-success"></i></div>
+                        <div>
+                            <h5 class="fw-bold">Direct Communication</h5>
+                            <p class="text-muted">Talk directly to the worker. No hidden fees or commissions.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">What Our Users Say</h2>
+                <div class="section-line"></div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-muted">"Best platform in Karachi! Found an AC technician in 5 minutes. Very professional behavior."</p>
+                        <h6 class="fw-bold mt-3">- Ahmed Raza</h6>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                        <p class="text-muted">"As a provider, I got 10 new clients in my first week. It's great because I deal directly with them."</p>
+                        <h6 class="fw-bold mt-3">- Kashif Mehmood (Electrician)</h6>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-muted">"Safe and secure. I like that I can see their CNIC verification status before calling."</p>
+                        <h6 class="fw-bold mt-3">- Sara Ali</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding bg-white">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="accordion shadow-sm" id="faqAccordion" style="max-width: 800px; margin: 0 auto;">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Is this service free?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Yes! Signing up and searching for providers is 100% free. You pay the provider directly for their work.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            How do I verify a provider?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Look for the "Verified" badge on their profile. This means their CNIC has been checked by our team.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Can I rate the service?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Absolutely! After the job is done, you can log in as a Seeker and give them a star rating to help others.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">HouseHold Hero</h4>
+                    <p>Connecting households with skilled professionals. Safe, Fast, and Reliable.</p>
+                    <div>
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <a href="/login" class="footer-link">Login</a>
+                    <a href="/signup" class="footer-link">Register</a>
+                    <a href="/about" class="footer-link">About Us</a>
+                    <a href="/contact" class="footer-link">Contact</a>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i> saadkh0211@gmail.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +92 343 2106570</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Karachi, Pakistan</p>
+                </div>
+            </div>
+            <hr class="mt-4" style="opacity: 0.1;">
+            <div class="text-center small">
+                &copy; 2026 HouseHold Hero by Saad Khan. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

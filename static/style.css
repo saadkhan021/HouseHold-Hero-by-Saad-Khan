@@ -1,0 +1,280 @@
+/* --- Modern Form Styling --- */
+
+/* Background for Auth Pages */
+.auth-bg {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The Main Form Card */
+.form-card-modern {
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1); /* Soft heavy shadow */
+    width: 100%;
+    max-width: 500px; /* Zyada chora na ho */
+    border-top: 5px solid var(--primary-blue); /* Top Blue Border */
+    transition: transform 0.3s ease;
+}
+
+.form-card-modern:hover {
+    transform: translateY(-5px); /* Hawa mein uthne wala effect */
+}
+
+/* Input Fields Design */
+.form-label {
+    font-weight: 600;
+    color: #444;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.input-group-text {
+    background-color: #f0f4f8;
+    border: 1px solid #ced4da;
+    border-right: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: var(--primary-blue);
+}
+
+.form-control-modern {
+    border: 1px solid #ced4da;
+    border-left: none; /* Icon k sath jud jaye */
+    background-color: #f0f4f8;
+    padding: 12px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition: all 0.3s;
+}
+
+/* Jab user type kare to Glow kare */
+.form-control-modern:focus {
+    background-color: #ffffff;
+    box-shadow: none;
+    border-color: var(--primary-blue);
+}
+
+/* Button Styling */
+.btn-modern {
+    background: linear-gradient(90deg, #0056b3 0%, #00c6ff 100%);
+    border: none;
+    padding: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 50px;
+    transition: transform 0.2s;
+}
+
+.btn-modern:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+}
+
+/* Heading Styling */
+.auth-title {
+    font-weight: 800;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 10px;
+}
+.auth-subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+}
+/* --- Premium Provider Card Styling --- */
+.provider-card-premium {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+    border: none;
+    height: 100%;
+}
+
+/* Hover karne par Card bounce karega */
+.provider-card-premium:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+/* Card ka upar wala hissa (Blue/Cyan Gradient) */
+.card-header-accent {
+    background: linear-gradient(135deg, #0056b3 0%, #00c6ff 100%);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.service-icon-large {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.card-body-premium {
+    padding: 30px;
+    text-align: center;
+}
+
+.provider-name {
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+
+.provider-location {
+    display: inline-block;
+    background: #f0f4f8;
+    color: #555;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+
+.btn-whatsapp-premium {
+    background: linear-gradient(90deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 14px;
+    border: none;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+    transition: transform 0.3s;
+}
+
+.btn-whatsapp-premium:hover {
+    transform: scale(1.05);
+    color: white;
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+}
+/* --- Responsive Adjustments --- */
+
+@media (max-width: 768px) {
+    
+    .hero-title {
+        font-size: 2.2rem !important;
+    }
+    
+
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+
+    .dashboard-header {
+        margin-top: 0;
+        padding: 30px 15px;
+    }
+    
+
+    .search-input {
+        font-size: 0.9rem;
+    }
+}
+/* --- CHATBOT STYLING --- */
+
+/* 1. Chat Button (Gol Icon) */
+.chat-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #0056b3, #00c6ff);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+.chat-btn:hover {
+    transform: scale(1.1);
+}
+
+/* 2. Chat Window (Box) */
+.chat-box {
+    display: none; /* Pehle chupa rahega */
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 320px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    z-index: 1000;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+/* Header */
+.chat-header {
+    background: #0056b3;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Messages Area */
+.chat-body {
+    height: 300px;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f9f9f9;
+}
+
+/* User vs Bot Messages */
+.msg {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    max-width: 80%;
+}
+.user-msg {
+    background: #e3f2fd;
+    color: #0056b3;
+    margin-left: auto; /* Right side */
+    border-bottom-right-radius: 2px;
+}
+.bot-msg {
+    background: #e9ecef;
+    color: #333;
+    margin-right: auto; /* Left side */
+    border-bottom-left-radius: 2px;
+}
+
+/* Input Area */
+.chat-footer {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+}
+.chat-input {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    outline: none;
+}

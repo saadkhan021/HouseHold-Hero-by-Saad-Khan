@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - HouseHold Hero</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-bg">
+
+    <div class="form-card-modern">
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Join us to find or provide services</p>
+
+        <form action="/signup" method="POST" enctype="multipart/form-data">
+            
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" name="name" class="form-control form-control-modern" placeholder="John Doe" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" name="email" class="form-control form-control-modern" placeholder="name@example.com" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phone (WhatsApp)</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <input type="text" name="phone" class="form-control form-control-modern" placeholder="923001234567" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">City / Area</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-map-marker-alt text-danger"></i></span>
+                    <input type="text" name="location" class="form-control form-control-modern" placeholder="e.g. Gulshan-e-Iqbal, Karachi" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" name="password" class="form-control form-control-modern" placeholder="Strong password" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">I want to:</label>
+                <select name="role" id="roleSelector" class="form-select form-control-modern" onchange="toggleFields()">
+                    <option value="seeker">Hire a Professional (Seeker)</option>
+                    <option value="provider">Work as a Professional (Provider)</option>
+                </select>
+            </div>
+
+            <div id="providerFields" style="display: none; background: #eef2ff; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px dashed #0056b3;">
+                <h6 class="text-primary fw-bold mb-3"><i class="fas fa-id-card"></i> Provider Details</h6>
+                
+                <div class="mb-3">
+                    <label class="form-label">CNIC Number</label>
+                    <input type="text" name="cnic" class="form-control form-control-modern" placeholder="42101-1234567-1">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Profile Picture</label>
+                    <input type="file" name="profile_pic" class="form-control form-control-modern" accept="image/*">
+                    <small class="text-muted">Upload a clear face photo (Optional)</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Service Type</label>
+                    <select name="service_type" class="form-select form-control-modern">
+                        <option value="Electrician">⚡ Electrician</option>
+                        <option value="Plumber">🔧 Plumber</option>
+                        <option value="AC Technician">❄️ AC Technician</option>
+                        <option value="Carpenter">🪑 Carpenter</option>
+                        <option value="Painter">🎨 Painter</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-modern w-100">Sign Up</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Already have an account? <a href="/login" class="text-decoration-none fw-bold">Login here</a>
+        </p>
+    </div>
+
+    <script>
+        function toggleFields() {
+            var role = document.getElementById("roleSelector").value;
+            var fields = document.getElementById("providerFields");
+            if (role === "provider") {
+                fields.style.display = "block";
+            } else {
+                fields.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
