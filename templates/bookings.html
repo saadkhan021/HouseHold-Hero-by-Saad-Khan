@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Orders - HouseHold Hero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
+        .booking-card { background: white; border-radius: 16px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        footer { background: #212529; color: #aaa; padding: 60px 0 20px 0; margin-top: auto; }
+
+        /* ── PILL NAVBAR ── */
+        .navbar-wrap { position: sticky; top: 16px; z-index: 1050; padding: 0 20px; pointer-events: none; }
+        .navbar-pill {
+            background: #0f172a; border-radius: 60px;
+            padding: 10px 10px 10px 16px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+            max-width: 980px; margin: 0 auto; pointer-events: all; gap: 8px;
+        }
+        .navbar-pill .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+        .brand-icon { width: 38px; height: 38px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #0062cc; flex-shrink: 0; }
+        .brand-name { color: white; font-weight: 700; font-size: 1rem; white-space: nowrap; }
+        .pill-nav-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+        .pill-nav-links a { color: rgba(255,255,255,0.78); text-decoration: none; font-weight: 600; font-size: 0.88rem; padding: 7px 14px; border-radius: 30px; transition: all 0.25s ease; white-space: nowrap; }
+        .pill-nav-links a:hover, .pill-nav-links a.active { color: #fff; background: rgba(255,255,255,0.12); }
+        .pill-nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .pill-back-btn { background: white; color: #0f172a; border: none; border-radius: 30px; padding: 8px 18px; font-weight: 700; font-size: 0.82rem; text-decoration: none; transition: all 0.25s ease; white-space: nowrap; }
+        .pill-back-btn:hover { background: #e2e8f0; color: #0f172a; }
+        .pill-hamburger { display: none; background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 50%; width: 36px; height: 36px; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+        .pill-hamburger:hover { background: rgba(255,255,255,0.2); }
+        .pill-mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.98); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        .pill-mobile-menu.open { display: flex; }
+        .pill-mobile-menu a { color: white; text-decoration: none; font-size: 1.3rem; font-weight: 700; padding: 10px 40px; border-radius: 30px; transition: background 0.2s; }
+        .pill-mobile-menu a:hover { background: rgba(255,255,255,0.1); }
+        .pill-mobile-close { position: absolute; top: 24px; right: 24px; background: rgba(255,255,255,0.1); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+        @media (max-width: 768px) {
+            .pill-nav-links { display: none; }
+            .pill-hamburger { display: flex; }
+            .brand-name { font-size: 0.88rem; }
+            .navbar-wrap { top: 10px; padding: 0 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PILL NAVBAR -->
+    <div class="navbar-wrap">
+        <div class="navbar-pill">
+            <a class="brand" href="/dashboard">
+                <div class="brand-icon"><i class="fas fa-hammer"></i></div>
+                <span class="brand-name">HouseHold Hero</span>
+            </a>
+            <ul class="pill-nav-links">
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/manage-bookings" class="active"><i class="fas fa-calendar-check me-1"></i>Bookings</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
+            <div class="pill-nav-right">
+                <a href="/dashboard" class="pill-back-btn">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+                </a>
+                <button class="pill-hamburger" onclick="document.getElementById('pillMobileMenu').classList.add('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="pillMobileMenu" class="pill-mobile-menu">
+        <button class="pill-mobile-close" onclick="document.getElementById('pillMobileMenu').classList.remove('open')">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/manage-bookings">Bookings</a>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="fw-bold text-dark mb-4"><i class="fas fa-stream text-primary me-2"></i> Your Bookings Dashboard</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} text-center shadow-sm rounded-3 mb-4">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if bookings %}
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    {% for job in bookings %}
+                    <div class="card booking-card p-4">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div>
+                                {% if role == 'provider' %}
+                                    <h4 class="fw-bold text-dark mb-1"><i class="fas fa-user-circle me-1 text-primary"></i> {{ job.customer_name }}</h4>
+                                    <p class="text-muted small mb-2"><i class="fas fa-phone-alt me-1"></i> {{ job.customer_phone }} | <i class="fas fa-map-pin me-1"></i> {{ job.customer_location }}</p>
+                                {% else %}
+                                    <h4 class="fw-bold text-dark mb-1"><i class="fas fa-user-tie me-1 text-primary"></i> {{ job.provider_name }}</h4>
+                                    <span class="badge bg-outline-primary border rounded-pill px-3 mb-2 text-primary fw-bold">{{ job.service_type }}</span>
+                                {% endif %}
+                                <div class="p-3 bg-light rounded-3 my-2 text-secondary italic">" {{ job.job_description }} "</div>
+                                <p class="mb-0 small fw-bold text-muted mt-2">
+                                    <i class="fas fa-calendar me-1 text-info"></i> Scheduled: {{ job.booking_date }} | <i class="fas fa-clock me-1 text-info"></i> Slot: {{ job.booking_time }}
+                                </p>
+                            </div>
+                            <div class="text-md-end mt-3 mt-md-0">
+                                <span class="badge fs-6 rounded-pill px-4 py-2 mb-3 d-inline-block 
+                                    {% if job.status == 'pending' %}bg-warning text-dark{% elif job.status == 'accepted' %}bg-info text-white{% elif job.status == 'completed' %}bg-success text-white{% else %}bg-secondary text-white{% endif %}">
+                                    {{ job.status | upper }}
+                                </span>
+                                
+                                <div class="d-flex gap-2 justify-content-md-end">
+                                    {% if role == 'provider' and job.status == 'pending' %}
+                                        <form action="/update-booking-status/{{ job.id }}/accepted" method="POST">
+                                            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">Accept Order</button>
+                                        </form>
+                                    {% elif role == 'provider' and job.status == 'accepted' %}
+                                        <form action="/update-booking-status/{{ job.id }}/completed" method="POST">
+                                            <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">Mark as Completed</button>
+                                        </form>
+                                    {% elif role == 'seeker' and job.status == 'accepted' %}
+                                        <a href="{{ job.whatsapp_link }}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3 fw-bold"><i class="fab fa-whatsapp"></i> Chat Live</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="p-5 text-center bg-white rounded-4 shadow-sm" style="max-width: 600px; margin: 0 auto;">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <h4 class="fw-bold">No Bookings Found</h4>
+                <p class="text-muted mb-0">You don't have any active booking logs inside your account history logs yet.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container text-center small">
+            &copy; 2026 HouseHold Hero by Saad Khan. All Rights Reserved.
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

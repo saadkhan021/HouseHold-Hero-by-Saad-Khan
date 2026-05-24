@@ -2,222 +2,618 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - HouseHold Hero</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     <style>
-        /* --- NEW NAVBAR HOVER EFFECT --- */
-        .nav-link {
-            transition: all 0.3s ease;
-            padding: 8px 20px !important;
-            border-radius: 25px;
-        }
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            color: #fff !important;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .nav-link.active {
-            background-color: white;
-            color: #0062cc !important;
-            font-weight: bold;
+        :root {
+            --brand-blue: #0062cc;
+            --brand-dark: #0f172a;
+            --brand-accent: #0096ff;
         }
 
-        /* --- FOOTER CSS --- */
-        footer {
-            background: #212529;
-            color: #aaa;
-            padding: 60px 0 20px 0;
-            margin-top: auto;
-        }
-        .footer-title {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .footer-link {
-            color: #aaa;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-            transition: 0.3s;
-        }
-        .footer-link:hover {
-            color: white;
-            padding-left: 5px;
-        }
+        * { box-sizing: border-box; }
 
-        /* Body Flex */
         body {
+            font-family: 'Poppins', sans-serif;
+            background: #f9fbfd;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            margin: 0;
+        }
+
+        /* =============================================
+           FLOATING PILL NAVBAR
+        ============================================= */
+        .navbar-wrap {
+            position: sticky;
+            top: 16px;
+            z-index: 1050;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .navbar-pill {
+            background: #0f172a;
+            border-radius: 60px;
+            padding: 10px 10px 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+            max-width: 960px;
+            margin: 0 auto;
+            pointer-events: all;
+            gap: 8px;
+        }
+
+        .navbar-pill .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 38px; height: 38px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            color: var(--brand-blue);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .pill-nav-links {
+            display: flex; align-items: center; gap: 4px;
+            list-style: none; margin: 0; padding: 0;
+        }
+
+        .pill-nav-links a {
+            color: rgba(255,255,255,0.78);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 7px 14px;
+            border-radius: 30px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pill-nav-links a:hover,
+        .pill-nav-links a.active {
+            color: #fff;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .pill-nav-right {
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+        }
+
+        .pill-contact-btn {
+            background: white; color: #0f172a;
+            border: none; border-radius: 30px;
+            padding: 8px 18px; font-weight: 700; font-size: 0.82rem;
+            text-decoration: none; transition: all 0.25s ease; white-space: nowrap;
+        }
+        .pill-contact-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+        .pill-lang-select {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white; border-radius: 20px;
+            padding: 5px 10px; font-size: 0.78rem;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            cursor: pointer; outline: none;
+        }
+        .pill-lang-select option { background: #0f172a; color: white; }
+
+        .pill-hamburger {
+            display: none;
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            border-radius: 50%; width: 36px; height: 36px;
+            align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.9rem;
+        }
+        .pill-hamburger:hover { background: rgba(255,255,255,0.2); }
+
+        .pill-mobile-menu {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.98);
+            z-index: 2000; flex-direction: column;
+            align-items: center; justify-content: center; gap: 20px;
+        }
+        .pill-mobile-menu.open { display: flex; }
+        .pill-mobile-menu a {
+            color: white; text-decoration: none; font-size: 1.4rem;
+            font-weight: 700; padding: 10px 40px; border-radius: 30px; transition: background 0.2s;
+        }
+        .pill-mobile-menu a:hover { background: rgba(255,255,255,0.1); }
+        .pill-mobile-close {
+            position: absolute; top: 24px; right: 24px;
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            width: 42px; height: 42px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .pill-nav-links, .pill-contact-btn, .pill-lang-select { display: none; }
+            .pill-hamburger { display: flex; }
+            .brand-name { font-size: 0.88rem; }
+            .navbar-wrap { top: 10px; padding: 0 12px; }
+        }
+
+        /* =============================================
+           PAGE HERO
+        ============================================= */
+        .page-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #0062cc 100%);
+            padding: 120px 0 80px 0;
+            margin-top: -70px;
+            padding-top: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 400px; height: 400px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .page-hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #93c5fd;
+            font-size: 0.75rem; font-weight: 600;
+            padding: 5px 16px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        /* =============================================
+           CONTACT SECTION
+        ============================================= */
+        .section-padding { padding: 90px 0; }
+
+        .contact-info-card {
+            background: linear-gradient(135deg, #0f172a 0%, #0c2461 100%);
+            border-radius: 28px;
+            padding: 48px 36px;
+            color: white;
+            height: 100%;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.16);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info-card::before {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -60px;
+            width: 250px; height: 250px;
+            background: rgba(0,150,255,0.1);
+            border-radius: 50%;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info-icon {
+            width: 50px; height: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            color: #93c5fd;
+        }
+
+        .contact-form-card {
+            background: white;
+            border-radius: 28px;
+            padding: 48px 40px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.07);
+            border: 1px solid #e8f0fe;
+            height: 100%;
+        }
+
+        .form-control-modern {
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.92rem;
+            transition: all 0.3s ease;
+            background: #f9fbfd;
+            outline: none;
+        }
+
+        .form-control-modern:focus {
+            border-color: #0062cc;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0,98,204,0.08);
+        }
+
+        .form-label-modern {
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,98,204,0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0,98,204,0.4);
+        }
+
+        /* Social links */
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-link {
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--brand-blue);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Map placeholder */
+        .map-placeholder {
+            background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            border: 2px dashed #bdd7ff;
+        }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        footer {
+            background: linear-gradient(180deg, #0f172a 0%, #0a1120 100%);
+            color: #94a3b8;
+            padding: 80px 0 36px 0;
+            border-top: 1px solid #1e293b;
+            margin-top: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-title { color: white; font-weight: 700; margin-bottom: 24px; font-size: 1rem; }
+        .footer-link { color: #94a3b8; text-decoration: none; display: block; margin-bottom: 12px; transition: 0.3s; font-size: 0.9rem; }
+        .footer-link:hover { color: white; padding-left: 5px; }
+
+        .footer-social a {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #94a3b8; text-decoration: none; transition: all 0.3s; margin-right: 8px;
+        }
+        .footer-social a:hover { background: var(--brand-blue); color: white; }
+
+        @media (max-width: 767px) {
+            .page-hero { padding-top: 100px; }
+            .contact-form-card { padding: 32px 24px; }
+            .contact-info-card { padding: 36px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(90deg, #0062cc, #0096ff); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="/">
-                <i class="fas fa-hammer"></i> HouseHold Hero
+    <!-- FLOATING PILL NAVBAR -->
+    <div class="navbar-wrap">
+        <div class="navbar-pill">
+            <a class="brand" href="/">
+                <div class="brand-icon"><i class="fas fa-hammer"></i></div>
+                <span class="brand-name">HouseHold Hero</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <ul class="pill-nav-links">
+                <li><a id="nav-home" href="/">Home</a></li>
+                <li><a id="nav-about" href="/about">About Us</a></li>
+                <li><a id="nav-contact" href="/contact" class="active">Contact Us</a></li>
+            </ul>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-                <div class="offcanvas-header bg-primary text-white">
-                    <h5 class="offcanvas-title fw-bold"><i class="fas fa-bars me-2"></i> Menu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-                </div>
-
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
-                        <li class="nav-item"><a class="nav-link mx-1" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link mx-1" href="/about">About Us</a></li>
-                        <li class="nav-item"><a class="nav-link active mx-1" href="/contact">Contact Us</a></li>
-                        <li class="nav-item d-lg-none w-100 my-2"><hr></li>
-                    </ul>
-                    
-                    <div class="d-flex justify-content-center">
-                        <a href="/login" class="btn btn-light text-primary rounded-pill px-4 fw-bold shadow-sm me-2">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                        <a href="/signup" class="btn btn-outline-light rounded-pill px-4 fw-bold">Register</a>
-                    </div>
-                </div>
+            <div class="pill-nav-right">
+                <select id="langToggle" class="pill-lang-select" onchange="switchLanguage(this.value)">
+                    <option value="en">🌐 English</option>
+                    <option value="ur">🌐 Roman Urdu</option>
+                </select>
+                <a href="/login" class="pill-contact-btn"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                <button class="pill-hamburger" onclick="document.getElementById('pillMobileMenu').classList.add('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
-    </nav>
-    <div class="bg-light py-5 text-center">
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="pillMobileMenu" class="pill-mobile-menu">
+        <button class="pill-mobile-close" onclick="document.getElementById('pillMobileMenu').classList.remove('open')"><i class="fas fa-times"></i></button>
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/login" style="color: #93c5fd;">Login</a>
+        <div style="margin-top: 10px;">
+            <select id="langToggleMobile" class="pill-lang-select" onchange="switchLanguage(this.value)" style="font-size: 1rem; padding: 10px 20px;">
+                <option value="en">🌐 English</option>
+                <option value="ur">🌐 Roman Urdu</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero text-center text-white">
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="page-hero-badge">We're Here to Help</div>
+            <h1 id="txt-contact-title" class="fw-800 mb-3" style="font-size: 3rem; font-weight: 800;">Contact Support</h1>
+            <p id="txt-contact-subtitle" class="opacity-75 mx-auto" style="max-width: 520px; font-size: 1.1rem; line-height: 1.8;">
+                Have operational issues? Our admin desk handles ticketing logs 24/7.
+            </p>
+        </div>
+    </div>
+
+    <!-- CONTACT SECTION -->
+    <section class="section-padding">
         <div class="container">
-            <h1 class="fw-bold text-primary">Contact Us</h1>
-            <p class="text-muted lead">Have questions? We are here to help 24/7.</p>
-        </div>
-    </div>
+            <div class="row g-5 align-items-stretch">
 
-    <div class="container py-5">
-        
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} text-center shadow-sm">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+                <!-- LEFT: Info Card -->
+                <div class="col-md-5">
+                    <div class="contact-info-card">
+                        <h3 id="info-heading" class="fw-bold mb-2" style="font-size: 1.6rem;">Get in Touch</h3>
+                        <div style="width: 40px; height: 3px; background: linear-gradient(90deg, #0096ff, #0062cc); border-radius: 4px; margin-bottom: 32px;"></div>
 
-        <div class="row g-5">
-            <div class="col-md-5">
-                <div class="p-4 bg-primary text-white rounded-4 shadow h-100">
-                    <h3 class="fw-bold mb-4">Get in Touch</h3>
-                    
-                    <div class="d-flex mb-4">
-                        <i class="fas fa-map-marker-alt fa-2x me-3"></i>
-                        <div>
-                            <h5 class="fw-bold">Our Office</h5>
-                            <p class="mb-0">Suite #402, Karachi, Pakistan.</p>
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h6 id="lbl-office" class="fw-bold mb-1" style="color: white;">Our Office</h6>
+                                <p class="mb-0" style="color: #94a3b8; font-size: 0.9rem;">Suite #402, Karachi, Pakistan.</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h6 id="lbl-email" class="fw-bold mb-1" style="color: white;">Email Us</h6>
+                                <p class="mb-0" style="color: #94a3b8; font-size: 0.9rem;">saadkh0211@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item" style="margin-bottom: 0;">
+                            <div class="contact-info-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h6 id="lbl-phone" class="fw-bold mb-1" style="color: white;">Call Us</h6>
+                                <p class="mb-0" style="color: #94a3b8; font-size: 0.9rem;">+92 343 2106570</p>
+                            </div>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+
+                        <!-- Hours -->
+                        <div style="margin-top: 32px; padding: 20px; background: rgba(255,255,255,0.07); border-radius: 16px; position: relative; z-index: 1;">
+                            <h6 class="fw-bold mb-2" style="color: #93c5fd; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Support Hours</h6>
+                            <div style="color: #94a3b8; font-size: 0.85rem; line-height: 2;">
+                                <div class="d-flex justify-content-between"><span>Mon – Fri</span><span style="color: white;">9 AM – 9 PM</span></div>
+                                <div class="d-flex justify-content-between"><span>Saturday</span><span style="color: white;">10 AM – 6 PM</span></div>
+                                <div class="d-flex justify-content-between"><span>Sunday</span><span style="color: #ef4444;">Closed</span></div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="d-flex mb-4">
-                        <i class="fas fa-envelope fa-2x me-3"></i>
-                        <div>
-                            <h5 class="fw-bold">Email Us</h5>
-                            <p class="mb-0">saadkh0211@gmail.com</p>
-                            <small>Replies within 24 hours</small>
-                        </div>
-                    </div>
+                <!-- RIGHT: Form Card -->
+                <div class="col-md-7">
+                    <div class="contact-form-card">
+                        <h3 id="form-heading" class="fw-bold mb-2">Send us a Message</h3>
+                        <p class="text-muted mb-4" style="font-size: 0.9rem;">Fill in the form below and we'll get back to you within 24 hours.</p>
 
-                    <div class="d-flex mb-4">
-                        <i class="fas fa-phone fa-2x me-3"></i>
-                        <div>
-                            <h5 class="fw-bold">Call Us</h5>
-                            <p class="mb-0">+92 343 2106570</p>
-                            <small>Mon-Fri, 9am to 6pm</small>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <div class="mt-4">
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
+                        <form action="/contact" method="POST">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label id="lbl-form-name" class="form-label-modern">Your Name</label>
+                                    <input type="text" name="name" class="form-control form-control-modern w-100" placeholder="Saad Khan" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label id="lbl-form-email" class="form-label-modern">Email Address</label>
+                                    <input type="email" name="email" class="form-control form-control-modern w-100" placeholder="saad@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label id="lbl-form-sub" class="form-label-modern">Subject</label>
+                                    <input type="text" name="subject" class="form-control form-control-modern w-100" placeholder="I need help with..." required>
+                                </div>
+                                <div class="col-12">
+                                    <label id="lbl-form-msg" class="form-label-modern">Message</label>
+                                    <textarea name="message" class="form-control form-control-modern w-100" rows="5" placeholder="Describe your issue or question in detail..." required></textarea>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <button type="submit" id="btn-submit" class="btn-submit">
+                                        <i class="fas fa-paper-plane me-2"></i> Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="col-md-7">
-                <div class="p-4 bg-white rounded-4 shadow-sm border">
-                    <h3 class="fw-bold mb-3 text-dark">Send us a Message</h3>
-                    <form action="/contact" method="POST">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Your Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="Saad Khan" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Email Address</label>
-                                <input type="email" name="email" class="form-control" placeholder="saad@example.com" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Subject</label>
-                                <input type="text" name="subject" class="form-control" placeholder="I need help with..." required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Message</label>
-                                <textarea name="message" class="form-control" rows="5" placeholder="Write your query here..." required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Send Message <i class="fas fa-paper-plane ms-2"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+    <!-- MAP / LOCATION SECTION -->
+    <section style="padding: 0 0 90px 0; background: #f9fbfd;">
+        <div class="container">
+            <div class="map-placeholder">
+                <div style="font-size: 2.5rem; margin-bottom: 16px;">📍</div>
+                <h5 class="fw-bold mb-2" style="color: #1e293b;">Find Us in Karachi</h5>
+                <p class="text-muted mb-0" style="font-size: 0.9rem;">Suite #402, Karachi, Sindh, Pakistan</p>
+                <a href="https://maps.google.com/?q=Karachi,Pakistan" target="_blank" style="display: inline-block; margin-top: 16px; background: #0062cc; color: white; border-radius: 30px; padding: 10px 28px; font-weight: 600; font-size: 0.88rem; text-decoration: none;">
+                    <i class="fas fa-external-link-alt me-1"></i> Open in Google Maps
+                </a>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h4 class="footer-title">HouseHold Hero</h4>
-                    <p>Connecting households with skilled professionals. Safe, Fast, and Reliable.</p>
-                    <div>
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+            <div class="row text-start">
+                <div class="col-md-4 mb-5">
+                    <h4 class="footer-title" style="font-size: 1.3rem;"><i class="fas fa-hammer text-primary me-2"></i>HouseHold Hero</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.8;">Connecting households with skilled professionals. Safe, Fast, and Reliable — right in Karachi.</p>
+                    <div class="footer-social mt-3">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-5 ps-md-5">
                     <h5 class="footer-title">Quick Links</h5>
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/about" class="footer-link">About Us</a>
+                    <a href="/contact" class="footer-link">Contact Us</a>
                     <a href="/login" class="footer-link">Login</a>
                     <a href="/signup" class="footer-link">Register</a>
-                    <a href="/about" class="footer-link">About Us</a>
-                    <a href="/contact" class="footer-link">Contact</a>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-5">
                     <h5 class="footer-title">Contact Us</h5>
-                    <p><i class="fas fa-envelope me-2"></i> saadkh0211@gmail.com</p>
-                    <p><i class="fas fa-phone me-2"></i> +92 343 2106570</p>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> Karachi, Pakistan</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-envelope me-2 text-primary"></i> saadkh0211@gmail.com</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-phone me-2 text-primary"></i> +92 343 2106570</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-map-marker-alt me-2 text-primary"></i> Karachi, Pakistan</p>
                 </div>
             </div>
-            <hr class="mt-4" style="opacity: 0.1;">
-            <div class="text-center small">
+            <hr style="border-color: #1e293b; opacity: 1; margin: 0 0 24px 0;">
+            <div class="text-center" style="font-size: 0.82rem; opacity: 0.5;">
                 &copy; 2026 HouseHold Hero by Saad Khan. All Rights Reserved.
             </div>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const langDictionary = {
+            en: {
+                navHome: "Home", navAbout: "About Us", navContact: "Contact Us",
+                title: "Contact Support",
+                subtitle: "Have operational issues? Our admin desk handles ticketing logs 24/7.",
+                iHeading: "Get in Touch", office: "Our Office", email: "Email Us", phone: "Call Us",
+                fHeading: "Send us a Message", fName: "Your Name", fEmail: "Email Address",
+                fSub: "Subject", fMsg: "Message", fBtn: "Send Message"
+            },
+            ur: {
+                navHome: "Ghar", navAbout: "Humare Baare Mein", navContact: "Rabta Karein",
+                title: "Rabta Support Desk",
+                subtitle: "Koi masla ya sawaal hai? Humara help desk 24/7 hazir hai.",
+                iHeading: "Maloomat", office: "Humara Daftar", email: "Hamein Email Bhejein", phone: "Hamein Call Karein",
+                fHeading: "Hamein Paigham Bhejein", fName: "Aapka Naam", fEmail: "Email Address",
+                fSub: "Unwan (Subject)", fMsg: "Paigham", fBtn: "Message Send Karein"
+            }
+        };
+
+        function switchLanguage(lang) {
+            localStorage.setItem('selectedLanguage', lang);
+            const dict = langDictionary[lang];
+            if (!dict) return;
+
+            document.getElementById('nav-home').innerText = dict.navHome;
+            document.getElementById('nav-about').innerText = dict.navAbout;
+            document.getElementById('nav-contact').innerText = dict.navContact;
+            document.getElementById('txt-contact-title').innerText = dict.title;
+            document.getElementById('txt-contact-subtitle').innerText = dict.subtitle;
+            document.getElementById('info-heading').innerText = dict.iHeading;
+            document.getElementById('lbl-office').innerText = dict.office;
+            document.getElementById('lbl-email').innerText = dict.email;
+            document.getElementById('lbl-phone').innerText = dict.phone;
+            document.getElementById('form-heading').innerText = dict.fHeading;
+            document.getElementById('lbl-form-name').innerText = dict.fName;
+            document.getElementById('lbl-form-email').innerText = dict.fEmail;
+            document.getElementById('lbl-form-sub').innerText = dict.fSub;
+            document.getElementById('lbl-form-msg').innerText = dict.fMsg;
+            document.getElementById('btn-submit').innerHTML = '<i class="fas fa-paper-plane me-2"></i>' + dict.fBtn;
+
+            // Sync mobile toggle
+            const mobileToggle = document.getElementById('langToggleMobile');
+            if (mobileToggle) mobileToggle.value = lang;
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+            const toggleEl = document.getElementById('langToggle');
+            const mobileToggle = document.getElementById('langToggleMobile');
+            if (toggleEl) toggleEl.value = savedLang;
+            if (mobileToggle) mobileToggle.value = savedLang;
+            switchLanguage(savedLang);
+        });
+    </script>
+    {% include 'chatbot.html' %}
 </body>
 </html>

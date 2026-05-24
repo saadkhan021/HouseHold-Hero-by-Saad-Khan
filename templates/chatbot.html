@@ -1,0 +1,223 @@
+<style>
+    /* Floating Chat Trigger Button */
+    .chat-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #0056b3, #0096ff);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 1050;
+        transition: transform 0.3s ease;
+    }
+    .chat-btn:hover {
+        transform: scale(1.08);
+    }
+
+    /* Interactive Chat Window Box */
+    .chat-box {
+        display: none;
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        height: 450px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        z-index: 1050;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .chat-header {
+        background: linear-gradient(135deg, #0056b3, #0096ff);
+        color: white;
+        padding: 15px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .chat-body {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .msg {
+        max-width: 80%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    .bot-msg {
+        background: #eef2f5;
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+    }
+    .user-msg {
+        background: #0056b3;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+    }
+    .chat-footer {
+        padding: 12px;
+        background: white;
+        border-top: 1px solid #eee;
+    }
+    .chat-input {
+        width: 100%;
+        border: 1px solid #dee2e6;
+        padding: 10px 15px;
+        border-radius: 25px;
+        outline: none;
+        font-size: 0.9rem;
+    }
+    .chat-input:focus {
+        border-color: #0096ff;
+    }
+</style>
+
+<div class="chat-btn" onclick="toggleChat()"><i class="fas fa-comment-dots"></i></div>
+<div class="chat-box" id="chatBox">
+    <div class="chat-header">
+        <span>🤖 Help Assistant</span>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button onclick="openCallSupport()" class="btn btn-sm btn-danger px-2 py-1" style="border-radius: 8px;" title="Call Admin Support">
+                <i class="fas fa-phone-alt" style="font-size: 0.8rem;"></i>
+            </button>
+            <i class="fas fa-times" style="cursor: pointer;" onclick="toggleChat()"></i>
+        </div>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="msg bot-msg">Hello! Main apki madad kaise kar sakta hoon?</div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="userInput" class="chat-input" placeholder="Type a message..." onkeypress="handleEnter(event)">
+    </div>
+</div>
+
+<div class="modal fade" id="callSupportModal" tabindex="-1" style="z-index: 1100;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden;">
+            <div class="modal-header bg-danger text-white border-0">
+                <h5 class="modal-title fw-bold"><i class="fas fa-phone"></i> Call Admin Support</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="alert alert-info border-0 mb-3" style="background-color: #e8f4ff; color: #0056b3;">
+                    <i class="fas fa-info-circle"></i> Our admin will call you shortly at your registered number.
+                </div>
+
+                <form id="supportForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Issue Type</label>
+                        <select name="issue_type" class="form-select" required>
+                            <option value="">Select issue type...</option>
+                            <option value="provider_complaint">Provider Complaint</option>
+                            <option value="payment_issue">Payment Issue</option>
+                            <option value="account_problem">Account Problem</option>
+                            <option value="verification">ID Verification Help</option>
+                            <option value="general_inquiry">General Inquiry</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Describe Your Issue</label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="Please describe your issue in detail..." style="border-radius: 12px;" required></textarea>
+                    </div>
+
+                    <div class="alert alert-warning border-0 mb-0" style="background-color: #fff8e1; color: #b78103;">
+                        <strong>📞 Admin Number:</strong> +92 343 2106570 <br>
+                        <small>You will also be contacted on your registered number</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 p-3 bg-light">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger rounded-pill px-4" onclick="submitCallRequest()">
+                    <i class="fas fa-phone-alt me-1"></i> Request Call Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleChat() { 
+        var box = document.getElementById("chatBox"); 
+        box.style.display = (box.style.display === "none" || box.style.display === "") ? "flex" : "none"; 
+    }
+    
+    function handleEnter(e) { 
+        if (e.key === "Enter") sendMessage(); 
+    }
+    
+    function sendMessage() {
+        var input = document.getElementById("userInput"); 
+        var message = input.value.trim(); 
+        if (message === "") return;
+        var chatBody = document.getElementById("chatBody");
+        chatBody.innerHTML += `<div class="msg user-msg">${message}</div>`; 
+        input.value = ""; 
+        chatBody.scrollTop = chatBody.scrollHeight;
+        var formData = new FormData(); 
+        formData.append("msg", message);
+
+        // Fixed endpoint path mapping match
+        fetch("/get_bot_response", { 
+            method: "POST", 
+            body: formData 
+        }).then(r => r.text()).then(d => {
+            chatBody.innerHTML += `<div class="msg bot-msg">${d}</div>`; 
+            chatBody.scrollTop = chatBody.scrollHeight;
+        });
+    }
+
+    function openCallSupport() {
+        var modal = new bootstrap.Modal(document.getElementById('callSupportModal'));
+        modal.show();
+    }
+
+    function submitCallRequest() {
+        const form = document.getElementById('supportForm');
+        const formData = new FormData(form);
+
+        fetch('/create-support-ticket', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ ' + data.message);
+                bootstrap.Modal.getInstance(document.getElementById('callSupportModal')).hide();
+                form.reset();
+                var chatBody = document.getElementById("chatBody");
+                chatBody.innerHTML += `<div class="msg bot-msg">Great! Your support request has been created. Our admin will call you within 2-4 hours on your registered number. Ticket ID: #${data.ticket_id}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            } else {
+                alert('❌ Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error creating support ticket');
+        });
+    }
+</script>

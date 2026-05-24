@@ -2,386 +2,981 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HouseHold Hero - Home Services Simplified</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --brand-blue: #0062cc;
+            --brand-dark: #0f172a;
+            --brand-light: #f1f5f9;
+            --brand-accent: #0096ff;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
             background-color: #f9fbfd;
+            margin: 0;
         }
 
-        /* --- HERO SECTION --- */
-        .hero-section {
-            background: linear-gradient(135deg, #0062cc 0%, #0096ff 100%);
+        /* =============================================
+           FLOATING PILL NAVBAR
+        ============================================= */
+        .navbar-wrap {
+            position: sticky;
+            top: 16px;
+            z-index: 1050;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .navbar-pill {
+            background: #0f172a;
+            border-radius: 60px;
+            padding: 10px 10px 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+            max-width: 960px;
+            margin: 0 auto;
+            pointer-events: all;
+            gap: 8px;
+        }
+
+        .navbar-pill .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--brand-blue);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
             color: white;
-            padding: 120px 0 80px 0;
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .pill-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .pill-nav-links a {
+            color: rgba(255,255,255,0.78);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 7px 14px;
+            border-radius: 30px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pill-nav-links a:hover,
+        .pill-nav-links a.active {
+            color: #fff;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .pill-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .pill-contact-btn {
+            background: white;
+            color: #0f172a;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pill-contact-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .pill-lang-select {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .pill-lang-select option {
+            background: #0f172a;
+            color: white;
+        }
+
+        /* Mobile hamburger for pill nav */
+        .pill-hamburger {
+            display: none;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .pill-hamburger:hover { background: rgba(255,255,255,0.2); }
+
+        .pill-mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.98);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .pill-mobile-menu.open { display: flex; }
+        .pill-mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 10px 40px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+        .pill-mobile-menu a:hover { background: rgba(255,255,255,0.1); }
+        .pill-mobile-close {
+            position: absolute;
+            top: 24px; right: 24px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .pill-nav-links, .pill-contact-btn, .pill-lang-select { display: none; }
+            .pill-hamburger { display: flex; }
+            .brand-name { font-size: 0.88rem; }
+            .navbar-wrap { top: 10px; padding: 0 12px; }
+        }
+
+        /* =============================================
+           HERO CAROUSEL
+        ============================================= */
+        .premium-slider {
+            width: 100%;
+            height: 600px;
+            background-color: #0f172a;
             position: relative;
         }
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-        .hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 40px;
-            font-weight: 300;
+
+        .carousel-item { height: 600px; }
+
+        .slider-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.42) contrast(1.05);
         }
 
-        /* --- STATS COUNTER --- */
-        .stats-box {
+        .carousel-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0,43,91,0.5) 0%, rgba(0,98,204,0.2) 100%);
+            z-index: 1;
+        }
+
+        .carousel-caption {
+            z-index: 2;
+            top: 50%;
+            transform: translateY(-45%);
+            bottom: auto;
+            max-width: 820px;
+            margin: 0 auto;
+            left: 0; right: 0;
+        }
+
+        .slider-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #93c5fd;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 16px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .slider-title {
+            font-size: 3.4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #ffffff;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .slider-subtitle {
+            font-size: 1.15rem;
+            opacity: 0.92;
+            margin-top: 18px;
+            margin-bottom: 36px;
+            font-weight: 300;
+            color: #e2e8f0;
+        }
+
+        .hero-btn-primary {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            margin-top: -60px;
+            color: var(--brand-blue);
+            border: none;
+            border-radius: 50px;
+            padding: 14px 36px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+            background: #f1f5f9;
+            color: var(--brand-blue);
+        }
+
+        /* =============================================
+           STATS BOX — 3D GLASS CARD
+        ============================================= */
+        .stats-outer {
             position: relative;
             z-index: 10;
-        }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #0062cc;
-        }
-        .stat-label {
-            color: #666;
-            font-weight: 500;
+            margin-top: -60px;
         }
 
-        /* --- CARDS (Seeker/Provider) --- */
+        .stats-box {
+            background: white;
+            border-radius: 24px;
+            padding: 44px 48px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.09), 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+            transform: perspective(1000px) rotateX(1deg);
+        }
+
+        .stat-card {
+            background: #f8faff;
+            border-radius: 18px;
+            padding: 28px 24px;
+            border: 1px solid #e8f0fe;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,98,204,0.12);
+        }
+
+        .stat-number {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            margin: 0 auto 14px auto;
+        }
+
+        /* Keep old divider class to avoid breaking anything but hide it */
+        .stat-divider { display: none; }
+
+        /* =============================================
+           SECTIONS COMMON
+        ============================================= */
+        .section-padding { padding: 100px 0; }
+
+        .section-title {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 2.3rem;
+        }
+
+        .section-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .section-line {
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-blue), var(--brand-accent));
+            margin: 14px auto 20px auto;
+            border-radius: 10px;
+        }
+
+        /* =============================================
+           ROLE CARDS — 3D PREMIUM
+        ============================================= */
         .role-card {
-            border: none;
-            border-radius: 20px;
-            transition: 0.3s;
+            border-radius: 28px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
             height: 100%;
+            padding: 50px 38px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-radius: 28px 28px 0 0;
+        }
+
+        .role-card.seeker::before { background: linear-gradient(90deg, #0062cc, #0096ff); }
+        .role-card.provider::before { background: linear-gradient(90deg, #059669, #10b981); }
+
         .role-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(-12px) perspective(800px) rotateX(3deg);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1), 0 6px 16px rgba(0,0,0,0.06);
         }
+
         .icon-box-lg {
             width: 80px;
             height: 80px;
-            border-radius: 50%;
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            margin-bottom: 20px;
+            margin: 0 auto 28px auto;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         }
 
-        /* --- SECTIONS COMMON --- */
-        .section-padding {
-            padding: 80px 0;
-        }
-        .section-title {
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .section-line {
-            width: 60px;
-            height: 4px;
-            background: #0062cc;
-            margin: 0 auto 50px auto;
-            border-radius: 2px;
+        .icon-box-lg.blue {
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            color: white;
         }
 
-        /* --- HOW IT WORKS --- */
+        .icon-box-lg.green {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+
+        /* =============================================
+           HOW IT WORKS
+        ============================================= */
+        .steps-wrapper {
+            position: relative;
+        }
+
+        .steps-connector {
+            display: none;
+        }
+
         .step-circle {
-            width: 60px;
-            height: 60px;
-            background: #e3f2fd;
-            color: #0062cc;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            margin: 0 auto 20px auto;
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin: 0 auto 22px auto;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 24px rgba(0,98,204,0.3);
         }
 
-        /* --- TESTIMONIALS --- */
+        /* =============================================
+           WHY CHOOSE US
+        ============================================= */
+        .why-section {
+            background: linear-gradient(135deg, #f8faff 0%, #eef4ff 100%);
+        }
+
+        .why-img-wrap {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.14);
+            transform: perspective(900px) rotateY(-6deg);
+            transition: transform 0.4s ease;
+        }
+
+        .why-img-wrap:hover {
+            transform: perspective(900px) rotateY(-2deg);
+        }
+
+        .why-img-wrap img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .why-img-badge {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            background: white;
+            border-radius: 16px;
+            padding: 14px 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .why-feature-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+
+        .why-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.3rem;
+        }
+
+        /* =============================================
+           TESTIMONIALS
+        ============================================= */
         .testimonial-card {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid #0062cc;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 36px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
-        /* --- FOOTER --- */
-        footer {
-            background: #212529;
-            color: #aaa;
-            padding: 60px 0 20px 0;
+        .testimonial-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
         }
+
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 16px;
+            right: 24px;
+            font-size: 5rem;
+            color: #e2e8f0;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        /* =============================================
+           FAQ
+        ============================================= */
+        .accordion-item {
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-button {
+            font-weight: 600;
+            background: white;
+            color: #1e293b;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: #f0f7ff;
+            color: var(--brand-blue);
+            box-shadow: none;
+        }
+
+        .accordion-button:focus { box-shadow: none; }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        footer {
+            background: linear-gradient(180deg, #0f172a 0%, #0a1120 100%);
+            color: #94a3b8;
+            padding: 80px 0 36px 0;
+            border-top: 1px solid #1e293b;
+        }
+
         .footer-title {
             color: white;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            font-size: 1rem;
         }
+
         .footer-link {
-            color: #aaa;
+            color: #94a3b8;
             text-decoration: none;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             transition: 0.3s;
+            font-size: 0.9rem;
         }
-        .footer-link:hover {
+
+        .footer-link:hover { color: white; padding-left: 5px; }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-right: 8px;
+        }
+
+        .footer-social a:hover {
+            background: var(--brand-blue);
             color: white;
-            padding-left: 5px;
+        }
+
+        /* =============================================
+           CTA BANNER
+        ============================================= */
+        .cta-banner {
+            background: linear-gradient(135deg, #0062cc 0%, #0096ff 100%);
+            border-radius: 28px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,98,204,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 767px) {
+            .slider-title { font-size: 2.2rem; }
+            .premium-slider, .carousel-item { height: 520px; }
+            .why-img-wrap { transform: none; }
+            .steps-connector { display: none; }
+            .stats-box { transform: none; }
+            .cta-banner { padding: 40px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(90deg, #0062cc, #0096ff); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="/">
-                <i class="fas fa-hammer"></i> HouseHold Hero
+    <!-- =============================================
+         FLOATING PILL NAVBAR
+    ============================================= -->
+    <div class="navbar-wrap">
+        <div class="navbar-pill">
+            <a class="brand" href="/">
+                <div class="brand-icon">
+                    <i class="fas fa-hammer"></i>
+                </div>
+                <span class="brand-name">HouseHold Hero</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <ul class="pill-nav-links">
+                <li><a id="nav-home" href="/" class="active">Home</a></li>
+                <li><a id="nav-about" href="/about">About Us</a></li>
+                <li><a id="nav-contact" href="/contact">Contact Us</a></li>
+            </ul>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                
-                <div class="offcanvas-header bg-primary text-white">
-                    <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">
-                        <i class="fas fa-bars me-2"></i> Menu
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="pill-nav-right">
+                <select id="langToggle" class="pill-lang-select" onchange="switchLanguage(this.value)">
+                    <option value="en">🌐 English</option>
+                    <option value="ur">🌐 Roman Urdu</option>
+                </select>
+                <a href="/login" class="pill-contact-btn">
+                    <i class="fas fa-sign-in-alt me-1"></i> Login
+                </a>
+                <a href="/signup" style="background: linear-gradient(135deg, #0062cc, #0096ff); color: white; border: none; border-radius: 30px; padding: 8px 18px; font-weight: 700; font-size: 0.82rem; text-decoration: none; white-space: nowrap;">
+                    Register
+                </a>
+                <button class="pill-hamburger" onclick="document.getElementById('pillMobileMenu').classList.add('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="pillMobileMenu" class="pill-mobile-menu">
+        <button class="pill-mobile-close" onclick="document.getElementById('pillMobileMenu').classList.remove('open')">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/login" style="color: #93c5fd;">Login</a>
+        <a href="/signup" style="background: linear-gradient(135deg, #0062cc, #0096ff); color: white; padding: 12px 40px;">Register</a>
+        <div style="margin-top: 10px;">
+            <select id="langToggleMobile" class="pill-lang-select" onchange="switchLanguage(this.value)" style="font-size: 1rem; padding: 10px 20px;">
+                <option value="en">🌐 English</option>
+                <option value="ur">🌐 Roman Urdu</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- =============================================
+         HERO CAROUSEL
+    ============================================= -->
+    <div id="heroCarousel" class="carousel slide carousel-fade premium-slider" data-bs-ride="carousel" data-bs-interval="4500">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="carousel-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069" class="slider-img" alt="Professional Services">
+                <div class="carousel-caption container">
+                    <div class="slider-badge">✦ Pakistan's #1 Home Services Platform</div>
+                    <h1 id="txt-hero-title" class="slider-title">Find Trusted Professionals for Every Home Need</h1>
+                    <p id="txt-hero-subtitle" class="slider-subtitle">From AC repair to plumbing, connect with verified experts instantly. Safe, secure, and hassle-free services at your doorstep.</p>
+                    <a href="#get-started" id="btn-hero-start" class="hero-btn-primary">Get Started <i class="fas fa-arrow-right ms-2"></i></a>
                 </div>
-
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
-                        <li class="nav-item">
-                            <a class="nav-link active fw-bold mx-2" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold mx-2" href="/about">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold mx-2" href="/contact">Contact Us</a>
-                        </li>
-                        <li class="nav-item d-lg-none w-100 my-2"><hr></li>
-                    </ul>
-                    
-                    <div class="d-flex justify-content-center">
-                        <a href="/login" class="btn btn-light text-primary rounded-pill px-4 fw-bold shadow-sm me-2">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                        <a href="/signup" class="btn btn-outline-light rounded-pill px-4 fw-bold">
-                            Register
-                        </a>
-                    </div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=2070" class="slider-img" alt="Plumbing Services">
+                <div class="carousel-caption container">
+                    <div class="slider-badge">✦ 0% Commission — Direct Bookings</div>
+                    <h1 class="slider-title">Verified Smart On-Demand Home Utilities</h1>
+                    <p class="slider-subtitle">Direct booking pipeline with zero middleman commission, serving Karachi's households 24/7.</p>
+                    <a href="#get-started" class="hero-btn-primary">Find a Pro <i class="fas fa-arrow-right ms-2"></i></a>
                 </div>
             </div>
         </div>
-    </nav>
-    ```
-    <section class="hero-section text-center">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h1 class="hero-title">Find Trusted Professionals for Every Home Need</h1>
-                    <p class="hero-subtitle">
-                        From AC repair to plumbing, connect with verified experts instantly. 
-                        Safe, secure, and hassle-free services at your doorstep.
-                    </p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="#get-started" class="btn btn-light text-primary btn-lg rounded-pill px-5 fw-bold shadow">Get Started</a>
-                        <a href="#how-it-works" class="btn btn-outline-light btn-lg rounded-pill px-5 fw-bold">Learn More</a>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- =============================================
+         STATS BOX
+    ============================================= -->
+    <div class="container stats-outer">
+        <div class="stats-box">
+            <div class="row g-3 justify-content-center text-center">
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #eff6ff;">
+                            <i class="fas fa-user-check" style="color: #0062cc;"></i>
+                        </div>
+                        <div class="stat-number">500+</div>
+                        <div id="lbl-stat-1" class="stat-label">Verified Providers</div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="stats-box">
-                    <div class="row text-center">
-                        <div class="col-md-4 border-end">
-                            <div class="stat-number">500+</div>
-                            <div class="stat-label">Verified Providers</div>
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fefce8;">
+                            <i class="fas fa-smile" style="color: #eab308;"></i>
                         </div>
-                        <div class="col-md-4 border-end">
-                            <div class="stat-number">1,200+</div>
-                            <div class="stat-label">Happy Customers</div>
+                        <div class="stat-number">1,200+</div>
+                        <div id="lbl-stat-2" class="stat-label">Happy Customers</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff7ed;">
+                            <i class="fas fa-star" style="color: #f97316;"></i>
                         </div>
-                        <div class="col-md-4">
-                            <div class="stat-number">4.8</div>
-                            <div class="stat-label">     Rating ⭐</div>
-                        </div>
+                        <div class="stat-number">4.8</div>
+                        <div id="lbl-stat-3" class="stat-label">Average Rating</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- =============================================
+         WHO ARE YOU — ROLE CARDS
+    ============================================= -->
     <section id="get-started" class="section-padding">
         <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">Who Are You?</h2>
+            <div class="text-center mb-5">
+                <h2 id="txt-role-title" class="section-title">Who Are You?</h2>
                 <div class="section-line"></div>
+                <p class="section-subtitle">Choose your role and get started in minutes.</p>
             </div>
-            
+
             <div class="row g-4 justify-content-center">
                 <div class="col-md-5">
-                    <div class="role-card p-5 text-center">
-                        <div class="icon-box-lg bg-primary text-white mx-auto">
+                    <div class="role-card seeker text-center">
+                        <div class="icon-box-lg blue">
                             <i class="fas fa-search"></i>
                         </div>
-                        <h3 class="fw-bold mb-3">I Need a Service</h3>
-                        <p class="text-muted mb-4">
+                        <h3 id="card-seeker-title" class="fw-bold mb-3">I Need a Service</h3>
+                        <p id="card-seeker-desc" class="text-muted mb-4">
                             Find electricians, plumbers, and technicians near you. View ratings, read reviews, and hire directly via WhatsApp.
                         </p>
-                        <a href="/signup" class="btn btn-primary rounded-pill w-100 py-3 fw-bold">Find a Pro</a>
+                        <a href="/signup" id="btn-seeker-go" class="btn btn-primary rounded-pill w-100 py-3 fw-bold" style="background: linear-gradient(135deg, #0062cc, #0096ff); border: none;">Find a Pro</a>
                     </div>
                 </div>
-
                 <div class="col-md-5">
-                    <div class="role-card p-5 text-center">
-                        <div class="icon-box-lg bg-success text-white mx-auto">
+                    <div class="role-card provider text-center">
+                        <div class="icon-box-lg green">
                             <i class="fas fa-briefcase"></i>
                         </div>
-                        <h3 class="fw-bold mb-3">I Want to Work</h3>
-                        <p class="text-muted mb-4">
+                        <h3 id="card-provider-title" class="fw-bold mb-3">I Want to Work</h3>
+                        <p id="card-provider-desc" class="text-muted mb-4">
                             Create your digital profile, showcase your skills, get verified, and receive direct orders from customers. No commission!
                         </p>
-                        <a href="/signup" class="btn btn-success rounded-pill w-100 py-3 fw-bold">Join as Provider</a>
+                        <a href="/signup" id="btn-provider-go" class="btn rounded-pill w-100 py-3 fw-bold text-white" style="background: linear-gradient(135deg, #059669, #10b981); border: none;">Join as Provider</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="how-it-works" class="section-padding bg-white">
+    <!-- =============================================
+         HOW IT WORKS
+    ============================================= -->
+    <section id="how-it-works" class="section-padding" style="background: #f8faff; border-top: 1px solid #e8f0fe; border-bottom: 1px solid #e8f0fe;">
         <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">How It Works</h2>
+            <div class="text-center mb-5">
+                <h2 id="txt-how-title" class="section-title">How It Works</h2>
                 <div class="section-line"></div>
+                <p class="section-subtitle">Three simple steps to connect with the right professional.</p>
             </div>
 
-            <div class="row text-center g-4">
+            <div class="row text-center g-4 steps-wrapper">
+                <div class="steps-connector d-none d-md-block"></div>
                 <div class="col-md-4">
                     <div class="step-circle">1</div>
-                    <h4 class="fw-bold">Search</h4>
-                    <p class="text-muted">Select the service you need (Electrician, Plumber, etc.) and browse top-rated profiles.</p>
+                    <h4 id="step1-h" class="fw-bold mb-2">Search Experts</h4>
+                    <p id="step1-p" class="text-muted">Select the service you need (Electrician, Plumber, etc.) and browse top-rated profiles.</p>
                 </div>
                 <div class="col-md-4">
                     <div class="step-circle">2</div>
-                    <h4 class="fw-bold">Review</h4>
-                    <p class="text-muted">Check their location, star ratings, and verification status to ensure safety.</p>
+                    <h4 id="step2-h" class="fw-bold mb-2">Review Status</h4>
+                    <p id="step2-p" class="text-muted">Check their location, star ratings, and verification status to ensure safety.</p>
                 </div>
                 <div class="col-md-4">
                     <div class="step-circle">3</div>
-                    <h4 class="fw-bold">Connect</h4>
-                    <p class="text-muted">Click the WhatsApp button to chat directly and fix the price. No middleman!</p>
+                    <h4 id="step3-h" class="fw-bold mb-2">Confirm Booking</h4>
+                    <p id="step3-p" class="text-muted">Submit an internal order booking log sheet directly to secure time slots.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section-padding" style="background-color: #f1f5f9;">
+    <!-- =============================================
+         WHY CHOOSE US
+    ============================================= -->
+    <section class="section-padding why-section">
         <div class="container">
-            <div class="row align-items-center">
+            <div class="row align-items-center g-5">
                 <div class="col-md-6">
-                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop" 
-                         class="img-fluid rounded-4 shadow-lg" 
-                         alt="Professional Electrician"
-                         style="object-fit: cover; height: 400px; width: 100%;">
+                    <div class="why-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop" alt="Professional Electrician">
+                        <div class="why-img-badge">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0062cc, #0096ff); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem;">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.85rem; color: #1e293b;">CNIC Verified</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">All professionals verified</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
-                    <h2 class="fw-bold mb-4">Why Choose HouseHold Hero?</h2>
-                    
-                    <div class="d-flex mb-4">
-                        <div class="me-3"><i class="fas fa-check-circle fa-2x text-primary"></i></div>
+
+                <div class="col-md-6">
+                    <h2 id="txt-why-title" class="section-title mb-4">Why Choose HouseHold Hero?</h2>
+
+                    <div class="why-feature-row">
+                        <div class="why-icon" style="background: #eff6ff;">
+                            <i class="fas fa-check-circle" style="color: #0062cc; font-size: 1.3rem;"></i>
+                        </div>
                         <div>
-                            <h5 class="fw-bold">Verified Professionals</h5>
-                            <p class="text-muted">We verify CNICs to ensure your safety and trust.</p>
+                            <h5 id="why-1-h" class="fw-bold mb-1">Verified Professionals</h5>
+                            <p id="why-1-p" class="text-muted mb-0">We verify CNICs to ensure your safety and trust on every booking.</p>
                         </div>
                     </div>
 
-                    <div class="d-flex mb-4">
-                        <div class="me-3"><i class="fas fa-star fa-2x text-warning"></i></div>
+                    <div class="why-feature-row">
+                        <div class="why-icon" style="background: #fefce8;">
+                            <i class="fas fa-star" style="color: #eab308; font-size: 1.3rem;"></i>
+                        </div>
                         <div>
-                            <h5 class="fw-bold">Community Ratings</h5>
-                            <p class="text-muted">Hire based on real feedback from other users.</p>
+                            <h5 id="why-2-h" class="fw-bold mb-1">Community Ratings</h5>
+                            <p id="why-2-p" class="text-muted mb-0">Hire based on real feedback and star ratings from other households.</p>
                         </div>
                     </div>
 
-                    <div class="d-flex">
-                        <div class="me-3"><i class="fab fa-whatsapp fa-2x text-success"></i></div>
+                    <div class="why-feature-row" style="margin-bottom: 0;">
+                        <div class="why-icon" style="background: #f0fdf4;">
+                            <i class="fab fa-whatsapp" style="color: #16a34a; font-size: 1.3rem;"></i>
+                        </div>
                         <div>
-                            <h5 class="fw-bold">Direct Communication</h5>
-                            <p class="text-muted">Talk directly to the worker. No hidden fees or commissions.</p>
+                            <h5 id="why-3-h" class="fw-bold mb-1">Direct Communication</h5>
+                            <p id="why-3-p" class="text-muted mb-0">Talk directly to the worker. No hidden fees or middleman commissions.</p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section-padding">
+    <!-- =============================================
+         TESTIMONIALS
+    ============================================= -->
+    <section class="section-padding" style="background: white;">
         <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">What Our Users Say</h2>
+            <div class="text-center mb-5">
+                <h2 id="txt-test-title" class="section-title">What Our Users Say</h2>
                 <div class="section-line"></div>
             </div>
-            
+
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="testimonial-card h-100">
-                        <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        <p class="text-muted">"Best platform in Karachi! Found an AC technician in 5 minutes. Very professional behavior."</p>
-                        <h6 class="fw-bold mt-3">- Ahmed Raza</h6>
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-muted mb-3">"Best platform in Karachi! Found an AC technician in 5 minutes. Very professional behavior."</p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0062cc, #0096ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">A</div>
+                            <h6 class="fw-bold mb-0">Ahmed Raza</h6>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="testimonial-card h-100">
-                        <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
-                        <p class="text-muted">"As a provider, I got 10 new clients in my first week. It's great because I deal directly with them."</p>
-                        <h6 class="fw-bold mt-3">- Kashif Mehmood (Electrician)</h6>
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="text-muted mb-3">"As a provider, I got 10 new clients in my first week. It's great because I deal directly with them."</p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #059669, #10b981); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">K</div>
+                            <h6 class="fw-bold mb-0">Kashif Mehmood <span class="text-muted fw-normal" style="font-size: 0.8rem;">(Electrician)</span></h6>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="testimonial-card h-100">
-                        <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        <p class="text-muted">"Safe and secure. I like that I can see their CNIC verification status before calling."</p>
-                        <h6 class="fw-bold mt-3">- Sara Ali</h6>
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-muted mb-3">"Safe and secure. I like that I can see their CNIC verification status before calling."</p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #7c3aed, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">S</div>
+                            <h6 class="fw-bold mb-0">Sara Ali</h6>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section style="padding: 60px 0 48px; background: #f8faff;">
         <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="text-center mb-4">
+                <h2 id="txt-faq-title" class="section-title">Frequently Asked Questions</h2>
                 <div class="section-line"></div>
             </div>
 
-            <div class="accordion shadow-sm" id="faqAccordion" style="max-width: 800px; margin: 0 auto;">
+            <div class="accordion shadow-sm" id="faqAccordion" style="max-width: 760px; margin: 0 auto;">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
@@ -409,12 +1004,48 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                            Can I rate the service?
+                            What areas does HouseHold Hero currently cover?
                         </button>
                     </h2>
                     <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                         <div class="accordion-body text-muted">
-                            Absolutely! After the job is done, you can log in as a Seeker and give them a star rating to help others.
+                            We currently operate across Karachi, Pakistan. We are actively expanding to other major cities — stay tuned for updates!
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            How do I book a service provider?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Simply search for the service you need, browse top-rated profiles, and use the in-platform booking form to secure a time slot. You can also reach out directly via WhatsApp.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            Is there any commission charged from providers?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            No! HouseHold Hero is a zero-commission platform. Providers keep 100% of their earnings and deal directly with customers.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                            What if I have a bad experience with a provider?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            You can leave an honest star rating and written review on their profile to help other users. For serious concerns, please contact our support team via the Contact Us page and we will investigate promptly.
                         </div>
                     </div>
                 </div>
@@ -422,34 +1053,54 @@
         </div>
     </section>
 
-    <footer>
+    <!-- =============================================
+         CTA BANNER
+    ============================================= -->
+    <section style="padding: 48px 0 80px; background: white;">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h4 class="footer-title">HouseHold Hero</h4>
-                    <p>Connecting households with skilled professionals. Safe, Fast, and Reliable.</p>
-                    <div>
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5 class="footer-title">Quick Links</h5>
-                    <a href="/login" class="footer-link">Login</a>
-                    <a href="/signup" class="footer-link">Register</a>
-                    <a href="/about" class="footer-link">About Us</a>
-                    <a href="/contact" class="footer-link">Contact</a>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="footer-title">Contact Us</h5>
-                    <p><i class="fas fa-envelope me-2"></i> saadkh0211@gmail.com</p>
-                    <p><i class="fas fa-phone me-2"></i> +92 343 2106570</p>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> Karachi, Pakistan</p>
+            <div class="cta-banner">
+                <h2 class="text-white fw-800 mb-3" style="font-size: 2.2rem; font-weight: 800;">Ready to Find Your Hero?</h2>
+                <p class="text-white opacity-75 mb-4">Join thousands of households already using HouseHold Hero.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="/signup" style="background: white; color: #0062cc; border-radius: 50px; padding: 14px 36px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">Get Started Free</a>
+                    <a href="/about" style="background: rgba(255,255,255,0.15); color: white; border: 2px solid rgba(255,255,255,0.4); border-radius: 50px; padding: 14px 36px; font-weight: 700; text-decoration: none;">Learn More</a>
                 </div>
             </div>
-            <hr class="mt-4" style="opacity: 0.1;">
-            <div class="text-center small">
+        </div>
+    </section>
+
+    <!-- =============================================
+         FOOTER
+    ============================================= -->
+    <footer>
+        <div class="container">
+            <div class="row text-start">
+                <div class="col-md-4 mb-5">
+                    <h4 class="footer-title" style="font-size: 1.3rem;"><i class="fas fa-hammer text-primary me-2"></i>HouseHold Hero</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.8;">Connecting households with skilled professionals. Safe, Fast, and Reliable — right in Karachi.</p>
+                    <div class="footer-social mt-3">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5 ps-md-5">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/about" class="footer-link">About Us</a>
+                    <a href="/contact" class="footer-link">Contact Us</a>
+                    <a href="/login" class="footer-link">Login</a>
+                    <a href="/signup" class="footer-link">Register</a>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-envelope me-2 text-primary"></i> saadkh0211@gmail.com</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-phone me-2 text-primary"></i> +92 343 2106570</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-map-marker-alt me-2 text-primary"></i> Karachi, Pakistan</p>
+                </div>
+            </div>
+            <hr style="border-color: #1e293b; opacity: 1; margin: 0 0 24px 0;">
+            <div class="text-center" style="font-size: 0.82rem; opacity: 0.5;">
                 &copy; 2026 HouseHold Hero by Saad Khan. All Rights Reserved.
             </div>
         </div>
@@ -457,5 +1108,89 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script>
+        const langDictionary = {
+            en: {
+                navHome: "Home", navAbout: "About Us", navContact: "Contact Us",
+                heroTitle: "Find Trusted Professionals for Every Home Need",
+                heroSubtitle: "From AC repair to plumbing, connect with verified experts instantly. Safe, secure, and hassle-free services at your doorstep.",
+                heroStart: "Get Started", roleTitle: "Who Are You?",
+                seekerTitle: "I Need a Service", seekerDesc: "Find electricians, plumbers, and technicians near you. View ratings, read reviews, and hire directly via WhatsApp.", seekerGo: "Find a Pro",
+                providerTitle: "I Want to Work", providerDesc: "Create your digital profile, showcase your skills, get verified, and receive direct orders from customers. No commission!", providerGo: "Join as Provider",
+                howTitle: "How It Works", s1H: "Search Experts", s1P: "Select the service you need (Electrician, Plumber, etc.) and browse top-rated profiles.",
+                s2H: "Review Status", s2P: "Check their location, star ratings, and verification status to ensure safety.",
+                s3H: "Confirm Booking", s3P: "Submit an internal order booking log sheet directly to secure time slots.",
+                whyTitle: "Why Choose HouseHold Hero?", w1H: "Verified Professionals", w1P: "We verify CNICs to ensure your safety and trust on every booking.",
+                w2H: "Community Ratings", w2P: "Hire based on real feedback and star ratings from other households.",
+                w3H: "Direct Communication", w3P: "Talk directly to the worker. No hidden fees or middleman commissions.",
+                testTitle: "What Our Users Say", faqTitle: "Frequently Asked Questions"
+            },
+            ur: {
+                navHome: "Ghar", navAbout: "Humare Baare Mein", navContact: "Rabta Karein",
+                heroTitle: "Ghar Ke Har Kaam Ke Liye Behtareen Experts Dhoondhein",
+                heroSubtitle: "AC repair se le kar plumbing tak, verified experts se foran rabta karein. Mehfooz aur ba-asani khidmaat aapke ghar tak.",
+                heroStart: "Shuru Karein", roleTitle: "Aap Kaun Hain?",
+                seekerTitle: "Mujhe Kaam Karwana Hai", seekerDesc: "Apne kareeb Electricians aur Plumbers dhoondhein. Unki ratings dekhein aur direct booking chalayein.", seekerGo: "Expert Dhoondhein",
+                providerTitle: "Mujhe Kaam Chahiye", providerDesc: "Apna digital profile banayein, hunar dikhayein aur direct orders haasil karein. Koi commission nahi!", providerGo: "Kamai Shuru Karein",
+                howTitle: "Kaam Karne Ka Tarika", s1H: "Hunarman Dhoondhein", s1P: "Apni marzi ki service select karein aur apne area ke top karigar hazrat ki list dekhein.",
+                s2H: "Profile Janchein", s2P: "Karigar ka verification status aur live identity match credentials check karke tasalli karlein.",
+                s3H: "Order Secure Karein", s3P: "Website ke andar hi direct order booking schedule set karke time slot mehfooz karein.",
+                whyTitle: "HouseHold Hero Kyun Chunein?", w1H: "Verified Karigar", w1P: "Hum aapki hifazat ke liye CNIC verify karte hain.",
+                w2H: "Public Feedback", w2P: "Doosre users ke reviews dekh kar sahi faisla karein.",
+                w3H: "Direct Raabta", w3P: "Karigar se direct baat karein, koi commission ya fees nahi.",
+                testTitle: "Log Humare Baare Mein Kya Kehte Hain", faqTitle: "Aam Sawaalat (FAQ)"
+            }
+        };
+
+        function switchLanguage(lang) {
+            localStorage.setItem('selectedLanguage', lang);
+            const dict = langDictionary[lang];
+            if (!dict) return;
+
+            document.getElementById('nav-home').innerText = dict.navHome;
+            document.getElementById('nav-about').innerText = dict.navAbout;
+            document.getElementById('nav-contact').innerText = dict.navContact;
+            document.getElementById('txt-hero-title').innerText = dict.heroTitle;
+            document.getElementById('txt-hero-subtitle').innerText = dict.heroSubtitle;
+            document.getElementById('btn-hero-start').innerText = dict.heroStart;
+            document.getElementById('txt-role-title').innerText = dict.roleTitle;
+            document.getElementById('card-seeker-title').innerText = dict.seekerTitle;
+            document.getElementById('card-seeker-desc').innerText = dict.seekerDesc;
+            document.getElementById('btn-seeker-go').innerText = dict.seekerGo;
+            document.getElementById('card-provider-title').innerText = dict.providerTitle;
+            document.getElementById('card-provider-desc').innerText = dict.providerDesc;
+            document.getElementById('btn-provider-go').innerText = dict.providerGo;
+            document.getElementById('txt-how-title').innerText = dict.howTitle;
+            document.getElementById('step1-h').innerText = dict.s1H;
+            document.getElementById('step1-p').innerText = dict.s1P;
+            document.getElementById('step2-h').innerText = dict.s2H;
+            document.getElementById('step2-p').innerText = dict.s2P;
+            document.getElementById('step3-h').innerText = dict.s3H;
+            document.getElementById('step3-p').innerText = dict.s3P;
+            document.getElementById('txt-why-title').innerText = dict.whyTitle;
+            document.getElementById('why-1-h').innerText = dict.w1H;
+            document.getElementById('why-1-p').innerText = dict.w1P;
+            document.getElementById('why-2-h').innerText = dict.w2H;
+            document.getElementById('why-2-p').innerText = dict.w2P;
+            document.getElementById('why-3-h').innerText = dict.w3H;
+            document.getElementById('why-3-p').innerText = dict.w3P;
+            document.getElementById('txt-test-title').innerText = dict.testTitle;
+            document.getElementById('txt-faq-title').innerText = dict.faqTitle;
+
+            // Sync mobile lang toggle
+            const mobileToggle = document.getElementById('langToggleMobile');
+            if (mobileToggle) mobileToggle.value = lang;
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+            const toggleEl = document.getElementById('langToggle');
+            const mobileToggle = document.getElementById('langToggleMobile');
+            if (toggleEl) toggleEl.value = savedLang;
+            if (mobileToggle) mobileToggle.value = savedLang;
+            switchLanguage(savedLang);
+        });
+    </script>
+    {% include 'chatbot.html' %}
 </body>
 </html>

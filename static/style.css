@@ -1,28 +1,32 @@
-/* --- Modern Form Styling --- */
+/* ==========================================================================
+   1. MODERN AUTH FORM STYLING
+   ========================================================================== */
 
 /* Background for Auth Pages */
 .auth-bg {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
+    background-color: #f4f6f9;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: center;  /* Centering horizontally */
+    align-items: center;      /* Centering vertically */
+    min-height: 100vh;        /* Forces the container to take full screen height */
+    margin: 0;
+    padding: 20px;            /* Adds a nice padding gap on smaller mobile screens */
 }
 
-/* The Main Form Card */
+/* Central Login/Signup Container Box */
 .form-card-modern {
     background: #ffffff;
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1); /* Soft heavy shadow */
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     width: 100%;
-    max-width: 500px; /* Zyada chora na ho */
-    border-top: 5px solid var(--primary-blue); /* Top Blue Border */
-    transition: transform 0.3s ease;
+    max-width: 520px;         /* Keeps the form from expanding too wide on desktops */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-card-modern:hover {
     transform: translateY(-5px); /* Hawa mein uthne wala effect */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
 }
 
 /* Input Fields Design */
@@ -39,7 +43,7 @@
     border-right: none;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    color: var(--primary-blue);
+    color: #0056b3;
 }
 
 .form-control-modern {
@@ -56,7 +60,7 @@
 .form-control-modern:focus {
     background-color: #ffffff;
     box-shadow: none;
-    border-color: var(--primary-blue);
+    border-color: #0056b3;
 }
 
 /* Button Styling */
@@ -67,28 +71,36 @@
     font-weight: 700;
     letter-spacing: 1px;
     border-radius: 50px;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
 }
 
 .btn-modern:hover {
     transform: scale(1.02);
     box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+    color: white;
 }
 
 /* Heading Styling */
 .auth-title {
     font-weight: 800;
-    color: var(--primary-blue);
+    color: #0056b3;
     text-align: center;
     margin-bottom: 10px;
 }
+
 .auth-subtitle {
     text-align: center;
     color: #777;
     margin-bottom: 30px;
     font-size: 0.95rem;
 }
-/* --- Premium Provider Card Styling --- */
+
+
+/* ==========================================================================
+   2. PREMIUM SERVICE PROVIDER CARDS (DASHBOARD)
+   ========================================================================== */
+
 .provider-card-premium {
     background: #ffffff;
     border-radius: 20px;
@@ -131,7 +143,6 @@
     margin-bottom: 8px;
 }
 
-
 .provider-location {
     display: inline-block;
     background: #f0f4f8;
@@ -143,7 +154,6 @@
     margin-bottom: 20px;
 }
 
-
 .btn-whatsapp-premium {
     background: linear-gradient(90deg, #25D366 0%, #128C7E 100%);
     color: white;
@@ -154,6 +164,10 @@
     width: 100%;
     box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
     transition: transform 0.3s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
 }
 
 .btn-whatsapp-premium:hover {
@@ -161,120 +175,28 @@
     color: white;
     box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
 }
-/* --- Responsive Adjustments --- */
+
+
+/* ==========================================================================
+   3. RESPONSIVE LAYOUT BREAKPOINTS
+   ========================================================================== */
 
 @media (max-width: 768px) {
-    
     .hero-title {
         font-size: 2.2rem !important;
     }
     
-
     .container {
         padding-left: 20px;
         padding-right: 20px;
     }
 
-
     .dashboard-header {
-        margin-top: 0;
+        margin-top: 0 !important;
         padding: 30px 15px;
     }
     
-
     .search-input {
         font-size: 0.9rem;
     }
-}
-/* --- CHATBOT STYLING --- */
-
-/* 1. Chat Button (Gol Icon) */
-.chat-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #0056b3, #00c6ff);
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 60px;
-    font-size: 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    cursor: pointer;
-    z-index: 1000;
-    transition: transform 0.3s;
-}
-.chat-btn:hover {
-    transform: scale(1.1);
-}
-
-/* 2. Chat Window (Box) */
-.chat-box {
-    display: none; /* Pehle chupa rahega */
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 320px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    z-index: 1000;
-    overflow: hidden;
-    border: 1px solid #ddd;
-}
-
-/* Header */
-.chat-header {
-    background: #0056b3;
-    color: white;
-    padding: 15px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Messages Area */
-.chat-body {
-    height: 300px;
-    padding: 15px;
-    overflow-y: auto;
-    background: #f9f9f9;
-}
-
-/* User vs Bot Messages */
-.msg {
-    margin-bottom: 10px;
-    padding: 8px 12px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    max-width: 80%;
-}
-.user-msg {
-    background: #e3f2fd;
-    color: #0056b3;
-    margin-left: auto; /* Right side */
-    border-bottom-right-radius: 2px;
-}
-.bot-msg {
-    background: #e9ecef;
-    color: #333;
-    margin-right: auto; /* Left side */
-    border-bottom-left-radius: 2px;
-}
-
-/* Input Area */
-.chat-footer {
-    padding: 10px;
-    border-top: 1px solid #eee;
-    display: flex;
-}
-.chat-input {
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 8px 15px;
-    outline: none;
 }

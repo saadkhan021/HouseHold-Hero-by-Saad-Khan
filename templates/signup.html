@@ -4,27 +4,112 @@
     <meta charset="UTF-8">
     <title>Sign Up - HouseHold Hero</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Modern Layout Alignment Fixes */
+        .auth-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .form-card-modern {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 540px; /* Keeps the container locked to an elegant desktop width */
+            margin: auto;
+        }
+        .verify-trigger-btn {
+            background: linear-gradient(135deg, #0056b3, #0096ff);
+            color: white; border: none; border-radius: 12px;
+            padding: 16px; width: 100%; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        .verify-trigger-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,86,179,0.3); }
+        .verify-trigger-btn.done { background: linear-gradient(135deg, #28a745, #20c997); cursor: default; transform: none; box-shadow: none; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 7px 14px; border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-right: 8px;
+        }
+        .pill-pending { background:#f0f0f0; color:#888; }
+        .pill-done    { background:#d4edda; color:#155724; }
+        .step-progress {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+        }
+        .step-dot {
+            width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 700;
+            font-size: 0.85rem; flex-shrink: 0;
+        }
+        .step-dot.active   { background: #0056b3; color: white; }
+        .step-dot.done     { background: #28a745; color: white; }
+        .step-dot.inactive { background: #e0e0e0; color: #999; }
+        .step-line { flex: 1; height: 3px; border-radius: 2px; background: #e0e0e0; }
+        .step-line.done { background: #28a745; }
+        .camera-container {
+            position: relative; width: 100%; border-radius: 14px;
+            overflow: hidden; background: #000; max-height: 320px;
+        }
+        #cameraFeed {
+            width: 100%; display: block; max-height: 320px; object-fit: cover;
+        }
+        #overlayCanvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .instruction-box {
+            background: #e8f4ff; border-left: 4px solid #0056b3;
+            border-radius: 8px; padding: 12px 15px; margin-bottom: 14px;
+            font-size: 0.88rem;
+        }
+        .instruction-box ul { margin: 6px 0 0 0; padding-left: 18px; }
+        .instruction-box li { margin-bottom: 4px; }
+        .consent-box {
+            background: #fff8e1; border: 1px solid #ffc107;
+            border-radius: 10px; padding: 16px; margin-bottom: 16px;
+        }
+        .alert-verification {
+            background: #f0f8ff; border-left: 4px solid #0056b3;
+            border-radius: 8px; padding: 12px 15px; margin-top: 14px;
+            font-size: 0.85rem; color: #333;
+        }
+    </style>
 </head>
 <body class="auth-bg">
 
+<div class="auth-wrapper">
     <div class="form-card-modern">
-        <h2 class="auth-title">Create Account</h2>
-        <p class="auth-subtitle">Join us to find or provide services</p>
+        <h2 class="auth-title text-center">Create Account</h2>
+        <p class="auth-subtitle text-center">Join us to find or provide services</p>
 
-        <form action="/signup" method="POST" enctype="multipart/form-data">
-            
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/signup" method="POST" enctype="multipart/form-data" id="signupForm">
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    <input type="text" name="name" class="form-control form-control-modern" placeholder="John Doe" required>
+                    <input type="text" name="name" class="form-control form-control-modern" placeholder="e.g. Ahmed Khan" required>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">Email Address</label>
                 <div class="input-group">
@@ -32,7 +117,6 @@
                     <input type="email" name="email" class="form-control form-control-modern" placeholder="name@example.com" required>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">Phone (WhatsApp)</label>
                 <div class="input-group">
@@ -40,15 +124,13 @@
                     <input type="text" name="phone" class="form-control form-control-modern" placeholder="923001234567" required>
                 </div>
             </div>
-
-            <div class="mb-4">
+            <div class="mb-3">
                 <label class="form-label">City / Area</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-map-marker-alt text-danger"></i></span>
                     <input type="text" name="location" class="form-control form-control-modern" placeholder="e.g. Gulshan-e-Iqbal, Karachi" required>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">Password</label>
                 <div class="input-group">
@@ -56,32 +138,24 @@
                     <input type="password" name="password" class="form-control form-control-modern" placeholder="Strong password" required>
                 </div>
             </div>
-
             <div class="mb-4">
                 <label class="form-label">I want to:</label>
-                <select name="role" id="roleSelector" class="form-select form-control-modern" onchange="toggleFields()">
-                    <option value="seeker">Hire a Professional (Seeker)</option>
-                    <option value="provider">Work as a Professional (Provider)</option>
+                <select name="role" id="roleSelector" class="form-select form-control-modern" onchange="toggleProviderFields()">
+                    <option value="seeker">🔍 Hire a Professional (Seeker)</option>
+                    <option value="provider">🛠️ Work as a Professional (Provider)</option>
                 </select>
             </div>
 
-            <div id="providerFields" style="display: none; background: #eef2ff; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px dashed #0056b3;">
-                <h6 class="text-primary fw-bold mb-3"><i class="fas fa-id-card"></i> Provider Details</h6>
-                
+            <div id="providerFields" style="display:none;">
                 <div class="mb-3">
-                    <label class="form-label">CNIC Number</label>
-                    <input type="text" name="cnic" class="form-control form-control-modern" placeholder="42101-1234567-1">
+                    <label class="form-label fw-bold"><i class="fas fa-id-card text-primary"></i> CNIC Number</label>
+                    <input type="text" name="cnic" id="cnicInput" class="form-control form-control-modern" placeholder="42101-1234567-1">
+                    <small class="text-muted">Your National ID number (required for verification)</small>
                 </div>
-                
                 <div class="mb-4">
-                    <label class="form-label">Profile Picture</label>
-                    <input type="file" name="profile_pic" class="form-control form-control-modern" accept="image/*">
-                    <small class="text-muted">Upload a clear face photo (Optional)</small>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Service Type</label>
-                    <select name="service_type" class="form-select form-control-modern">
+                    <label class="form-label fw-bold"><i class="fas fa-tools text-primary"></i> Service Type</label>
+                    <select name="service_type" id="serviceTypeInput" class="form-select form-control-modern">
+                        <option value="">-- Select your service --</option>
                         <option value="Electrician">⚡ Electrician</option>
                         <option value="Plumber">🔧 Plumber</option>
                         <option value="AC Technician">❄️ AC Technician</option>
@@ -89,26 +163,500 @@
                         <option value="Painter">🎨 Painter</option>
                     </select>
                 </div>
+
+                <div style="border:2px solid #0056b3; border-radius:16px; padding:20px; margin-bottom:24px; background:#f8fbff;">
+                    <h6 style="color:#0056b3; font-weight:700; margin-bottom:4px;">
+                        <i class="fas fa-shield-alt"></i> Identity Verification
+                        <span class="badge bg-danger ms-2" style="font-size:0.72rem;">REQUIRED</span>
+                    </h6>
+                    <p class="text-muted small mb-3">Camera capture of ID + selfie required for all providers.</p>
+
+                    <div class="step-progress" id="stepProgress">
+                        <div class="step-dot inactive" id="dot1">1</div>
+                        <div class="step-line" id="line1"></div>
+                        <div class="step-dot inactive" id="dot2">2</div>
+                    </div>
+
+                    <div id="statusPills" style="margin-bottom:14px; display:none;">
+                        <span class="status-pill pill-pending" id="idStatusPill"><i class="fas fa-id-card"></i> ID: Pending</span>
+                        <span class="status-pill pill-pending" id="faceStatusPill"><i class="fas fa-user-circle"></i> Face: Pending</span>
+                    </div>
+
+                    <button type="button" class="verify-trigger-btn" id="startVerifyBtn" onclick="openConsentDialog()">
+                        <i class="fas fa-camera me-2"></i> Start Identity Verification (Live Camera)
+                    </button>
+
+                    <div class="alert-verification mt-3">
+                        <i class="fas fa-clock" style="color:#ffc107;"></i>
+                        <strong> Review Notice:</strong> After signup, admin reviews your documents within
+                        <strong>24–48 hours</strong>. Photos are deleted after review.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label"><i class="fas fa-camera text-muted"></i> Profile Picture <small class="text-muted">(Optional)</small></label>
+                    <input type="file" name="profile_pic" class="form-control form-control-modern" accept="image/*">
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-modern w-100">Sign Up</button>
+            <input type="hidden" name="id_image_b64"   id="idImageData">
+            <input type="hidden" name="face_image_b64" id="faceImageData">
+            <input type="hidden" name="consent_given"  id="consentGiven" value="false">
+
+            <button type="submit" class="btn btn-primary btn-modern w-100">
+                <i class="fas fa-user-plus me-2"></i> Create Account
+            </button>
         </form>
 
         <p class="text-center mt-4 mb-0">
             Already have an account? <a href="/login" class="text-decoration-none fw-bold">Login here</a>
         </p>
     </div>
+</div>
 
-    <script>
-        function toggleFields() {
-            var role = document.getElementById("roleSelector").value;
-            var fields = document.getElementById("providerFields");
-            if (role === "provider") {
-                fields.style.display = "block";
-            } else {
-                fields.style.display = "none";
-            }
+<div class="modal fade" id="consentModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:16px; overflow:hidden;">
+            <div class="modal-header" style="background:linear-gradient(135deg,#0056b3,#0096ff); color:white;">
+                <h5 class="modal-title"><i class="fas fa-lock me-2"></i> Privacy & Consent</h5>
+            </div>
+            <div class="modal-body">
+                <div class="consent-box">
+                    <p class="fw-bold mb-2">📋 What we capture and why:</p>
+                    <ul class="small mb-0">
+                        <li>📄 <strong>ID Document</strong> — to confirm your real identity (CNIC/Passport)</li>
+                        <li>📸 <strong>Face Selfie</strong> — to match with your ID document</li>
+                    </ul>
+                </div>
+                <p class="small"><strong>Our commitments to you:</strong></p>
+                <ul class="small">
+                    <li>✅ Images sent over <strong>secure HTTPS</strong> connection</li>
+                    <li>✅ <strong>Deleted within 48 hours</strong> after admin review</li>
+                    <li>✅ Only used for one-time account verification</li>
+                    <li>❌ Never shared with third parties</li>
+                    <li>❌ Not stored in any facial recognition system</li>
+                </ul>
+                <div class="form-check mt-3 p-3" style="background:#f0fff4; border-radius:8px; border:1px solid #c3e6cb;">
+                    <input class="form-check-input" type="checkbox" id="consentCheckbox" onchange="toggleConsentBtn()">
+                    <label class="form-check-label fw-bold" for="consentCheckbox">
+                        I understand and consent to temporary capture of my ID and face photo for verification purposes only.
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="consentAgreeBtn" disabled onclick="agreeAndStartCamera()">
+                    <i class="fas fa-check me-1"></i> Agree & Open Camera
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cameraModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius:16px; overflow:hidden;">
+            <div class="modal-header" style="background:linear-gradient(135deg,#0056b3,#0096ff); color:white;">
+                <h5 class="modal-title" id="cameraModalTitle">Step 1 of 2: Capture ID Document</h5>
+                <button type="button" class="btn-close btn-close-white" onclick="cancelCapture()"></button>
+            </div>
+            <div class="modal-body p-3">
+                <div class="instruction-box" id="instructionBox">
+                    <strong id="instructionTitle">📄 ID Document Instructions:</strong>
+                    <ul id="instructionList"></ul>
+                </div>
+
+                <div class="camera-container" id="cameraContainer">
+                    <video id="cameraFeed" autoplay playsinline muted></video>
+                    <canvas id="overlayCanvas"></canvas>
+                </div>
+
+                <div id="previewSection" style="display:none; text-align:center; margin-top:14px;">
+                    <img id="previewImg" style="max-width:100%; max-height:260px; border-radius:12px; border:3px solid #28a745;">
+                    <p class="mt-2 fw-bold" style="color:#28a745;"><i class="fas fa-check-circle"></i> Photo captured! Does it look clear?</p>
+                </div>
+
+                <div id="noCameraFallback" style="display:none; margin-top:14px;">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Camera not available. Please upload a photo instead.
+                    </div>
+                    <input type="file" id="fallbackFileInput" class="form-control" accept="image/png,image/jpeg,image/jpg"
+                           onchange="handleFallbackUpload()">
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="switchCamBtn" onclick="switchCamera()">
+                        <i class="fas fa-sync-alt"></i> Switch Camera
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-warning me-2" id="retakeBtn" style="display:none;" onclick="retakePhoto()">
+                        <i class="fas fa-redo"></i> Retake
+                    </button>
+                    <button type="button" class="btn btn-primary" id="captureBtn" onclick="capturePhoto()">
+                        <i class="fas fa-camera me-1"></i> Capture
+                    </button>
+                    <button type="button" class="btn btn-success" id="usePhotoBtn" style="display:none;" onclick="usePhoto()">
+                        Use This Photo <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ============================================
+   CAMERA CAPTURE MODULE
+   ============================================ */
+/* ============================================
+   CAMERA CAPTURE MODULE - STABILITY PATCH
+   ============================================ */
+let cameraStream   = null;
+let currentStep    = 'id';     
+let facingMode     = 'environment';
+let capturedId     = null;
+let capturedFace   = null;
+
+const STEPS = {
+    id: {
+        title:        'Step 1 of 2: Capture ID Document',
+        instrTitle:   '📄 ID Document Instructions:',
+        instructions: [
+            'Hold your CNIC / Passport flat and steady',
+            'All text and your photo must be readable',
+            'Good lighting — avoid shadows and glare',
+            'Fit the card inside the guide rectangle'
+        ],
+        overlay: 'card'
+    },
+    face: {
+        title:        'Step 2 of 2: Face Identification (Selfie)',
+        instrTitle:   '📸 Selfie Instructions:',
+        instructions: [
+            'Switch to front camera (click Switch Camera)',
+            'Look directly at the camera',
+            'Remove sunglasses or face coverings',
+            'Fit your face inside the oval guide'
+        ],
+        overlay: 'oval'
+    }
+};
+
+function toggleProviderFields() {
+    var role = document.getElementById('roleSelector').value;
+    var fields = document.getElementById('providerFields');
+    fields.style.display = (role === 'provider') ? 'block' : 'none';
+}
+
+function openConsentDialog() {
+    document.getElementById('consentCheckbox').checked = false;
+    document.getElementById('consentAgreeBtn').disabled = true;
+    new bootstrap.Modal(document.getElementById('consentModal')).show();
+}
+
+function toggleConsentBtn() {
+    document.getElementById('consentAgreeBtn').disabled =
+        !document.getElementById('consentCheckbox').checked;
+}
+
+function agreeAndStartCamera() {
+    bootstrap.Modal.getInstance(document.getElementById('consentModal')).hide();
+    document.getElementById('consentGiven').value = 'true';
+    currentStep = 'id';
+    facingMode  = 'environment';
+    openCameraModal();
+}
+
+async function openCameraModal() {
+    updateModalUI();
+    resetCameraUI();
+    new bootstrap.Modal(document.getElementById('cameraModal')).show();
+
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: facingMode, width:{ideal:1280}, height:{ideal:720} },
+            audio: false
+        });
+        var vid = document.getElementById('cameraFeed');
+        vid.srcObject = cameraStream;
+        vid.style.display = 'block';
+        document.getElementById('noCameraFallback').style.display = 'none';
+        document.getElementById('switchCamBtn').style.display  = 'inline-block';
+
+        vid.onloadedmetadata = function() { drawOverlay(STEPS[currentStep].overlay); };
+
+    } catch(err) {
+        console.warn('Camera error:', err);
+        document.getElementById('cameraFeed').style.display    = 'none';
+        document.getElementById('overlayCanvas').style.display = 'none';
+        document.getElementById('noCameraFallback').style.display = 'block';
+        document.getElementById('switchCamBtn').style.display  = 'none';
+        document.getElementById('captureBtn').style.display    = 'none';
+    }
+}
+
+function drawOverlay(type) {
+    var vid    = document.getElementById('cameraFeed');
+    var canvas = document.getElementById('overlayCanvas');
+    if(!vid || !canvas) return;
+    canvas.width  = vid.videoWidth  || vid.offsetWidth  || 640;
+    canvas.height = vid.videoHeight || vid.offsetHeight || 360;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = 'rgba(0,0,0,0.42)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    var cx = canvas.width / 2, cy = canvas.height / 2;
+    ctx.globalCompositeOperation = 'destination-out';
+
+    if (type === 'card') {
+        var w = canvas.width * 0.78, h = canvas.height * 0.52;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(cx-w/2, cy-h/2, w, h, 12);
+        else ctx.rect(cx-w/2, cy-h/2, w, h);
+        ctx.fill();
+    } else {
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, canvas.width*0.34, canvas.height*0.44, 0, 0, Math.PI*2);
+        ctx.fill();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.strokeStyle = '#00ff88';
+    ctx.lineWidth   = 3;
+    ctx.setLineDash([10, 6]);
+
+    if (type === 'card') {
+        var w = canvas.width*0.78, h = canvas.height*0.52;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(cx-w/2, cy-h/2, w, h, 12);
+        else ctx.rect(cx-w/2, cy-h/2, w, h);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#00ff88';
+        ctx.font = '14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('▲  Place ID card inside here  ▲', cx, cy+h/2+22);
+    } else {
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, canvas.width*0.34, canvas.height*0.44, 0, 0, Math.PI*2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#00ff88';
+        ctx.font = '14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('▲  Position face here  ▲', cx, cy+canvas.height*0.44+22);
+    }
+}
+
+function capturePhoto() {
+    var vid    = document.getElementById('cameraFeed');
+    var canvas = document.createElement('canvas');
+    canvas.width  = vid.videoWidth  || 640;
+    canvas.height = vid.videoHeight || 480;
+    canvas.getContext('2d').drawImage(vid, 0, 0);
+    var imgData = canvas.toDataURL('image/jpeg', 0.82);
+
+    if (currentStep === 'id')   capturedId   = imgData;
+    else                        capturedFace = imgData;
+
+    showPreview(imgData);
+}
+
+function handleFallbackUpload() {
+    var file = document.getElementById('fallbackFileInput').files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        if (currentStep === 'id')   capturedId   = e.target.result;
+        else                        capturedFace = e.target.result;
+        showPreview(e.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+function showPreview(imgData) {
+    document.getElementById('previewImg').src = imgData;
+    document.getElementById('previewSection').style.display   = 'block';
+    document.getElementById('cameraFeed').style.display       = 'none';
+    document.getElementById('overlayCanvas').style.display    = 'none';
+    document.getElementById('noCameraFallback').style.display = 'none';
+    document.getElementById('captureBtn').style.display       = 'none';
+    document.getElementById('retakeBtn').style.display        = 'inline-block';
+    document.getElementById('usePhotoBtn').style.display      = 'inline-block';
+    document.getElementById('switchCamBtn').style.display     = 'none';
+}
+
+function retakePhoto() {
+    if (currentStep === 'id')   capturedId   = null;
+    else                        capturedFace = null;
+
+    document.getElementById('previewSection').style.display   = 'none';
+    document.getElementById('cameraFeed').style.display       = 'block';
+    document.getElementById('overlayCanvas').style.display    = 'block';
+    document.getElementById('captureBtn').style.display       = 'inline-block';
+    document.getElementById('retakeBtn').style.display        = 'none';
+    document.getElementById('usePhotoBtn').style.display      = 'none';
+    document.getElementById('switchCamBtn').style.display     = 'inline-block';
+}
+
+/* -- FIXED: Single-Stream Continuity. No modal toggles, no hardware dead-locks -- */
+function usePhoto() {
+    if (currentStep === 'id') {
+        if (!capturedId) return;
+        
+        // Update Side Indicators
+        updateDot('dot1', 'done');
+        updateLine('line1', true);
+        updateDot('dot2', 'active');
+        updateStatusPill('idStatusPill', true);
+        document.getElementById('statusPills').style.display = 'block';
+
+        // Advance step state smoothly without touching the stream engine
+        currentStep = 'face';
+        facingMode  = 'user'; 
+
+        // Repopulate text fields instantly
+        updateModalUI();
+        resetCameraUI();
+        
+        // Try to toggle facing parameters on active streams or redraw overlay instantly
+        drawOverlay(STEPS[currentStep].overlay);
+        
+        // Auto-attempt front camera transition cleanly
+        switchCamera();
+
+    } else if (currentStep === 'face') {
+        if (!capturedFace) return;
+
+        // Strip Base64 safe headers
+        var cleanIdStr   = capturedId.includes(',')   ? capturedId.split(',')[1]   : capturedId;
+        var cleanFaceStr = capturedFace.includes(',') ? capturedFace.split(',')[1] : capturedFace;
+
+        document.getElementById('idImageData').value   = cleanIdStr;
+        document.getElementById('faceImageData').value = cleanFaceStr;
+
+        updateDot('dot2', 'done');
+        updateStatusPill('faceStatusPill', true);
+        document.getElementById('statusPills').style.display = 'block';
+
+        var btn = document.getElementById('startVerifyBtn');
+        btn.textContent = '✅ Verification Complete — Both Photos Captured';
+        btn.className   = 'verify-trigger-btn done';
+        btn.onclick     = null;
+
+        // Kill camera only when completely done and exit window
+        stopCamera();
+        var cameraModalEl = document.getElementById('cameraModal');
+        var modalInstance = bootstrap.Modal.getInstance(cameraModalEl);
+        if (modalInstance) modalInstance.hide();
+    }
+}
+
+async function switchCamera() {
+    // Check if system is active
+    let oldStream = cameraStream;
+    facingMode = (facingMode === 'user') ? 'environment' : 'user';
+    
+    try {
+        let newStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: facingMode, width:{ideal:1280}, height:{ideal:720} },
+            audio: false
+        });
+        
+        // Shutdown original stream safely AFTER getting the new one
+        if (oldStream) {
+            oldStream.getTracks().forEach(t => t.stop());
         }
-    </script>
+        
+        cameraStream = newStream;
+        var vid = document.getElementById('cameraFeed');
+        if(vid) {
+            vid.srcObject = cameraStream;
+            resetCameraUI();
+            vid.onloadedmetadata = function() { drawOverlay(STEPS[currentStep].overlay); };
+        }
+    } catch(err) { 
+        console.warn('Switch camera fallback error:', err);
+        // Fallback layout structural check
+        drawOverlay(STEPS[currentStep].overlay);
+    }
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(t => t.stop());
+        cameraStream = null;
+    }
+}
+
+function cancelCapture() {
+    stopCamera();
+    var m = bootstrap.Modal.getInstance(document.getElementById('cameraModal'));
+    if (m) m.hide();
+}
+
+function updateModalUI() {
+    var step = STEPS[currentStep];
+    document.getElementById('cameraModalTitle').textContent = step.title;
+    document.getElementById('instructionTitle').textContent = step.instrTitle;
+    var list = document.getElementById('instructionList');
+    list.innerHTML = step.instructions.map(i => '<li>' + i + '</li>').join('');
+}
+
+function resetCameraUI() {
+    document.getElementById('previewSection').style.display      = 'none';
+    document.getElementById('noCameraFallback').style.display    = 'none';
+    document.getElementById('cameraFeed').style.display          = 'block';
+    document.getElementById('overlayCanvas').style.display       = 'block';
+    document.getElementById('captureBtn').style.display          = 'inline-block';
+    document.getElementById('retakeBtn').style.display           = 'none';
+    document.getElementById('usePhotoBtn').style.display         = 'none';
+    document.getElementById('switchCamBtn').style.display        = 'inline-block';
+}
+
+function updateDot(id, state) {
+    var d = document.getElementById(id);
+    d.className = 'step-dot ' + state;
+    if (state === 'done') d.innerHTML = '<i class="fas fa-check" style="font-size:0.75rem;"></i>';
+}
+function updateLine(id, done) {
+    document.getElementById(id).className = 'step-line' + (done ? ' done' : '');
+}
+function updateStatusPill(id, done) {
+    var p = document.getElementById(id);
+    if (done) {
+        p.className   = 'status-pill pill-done';
+        p.innerHTML   = p.innerHTML.replace('Pending', '✅ Done');
+    }
+}
+
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    if (document.getElementById('roleSelector').value === 'provider') {
+        var cnic    = document.getElementById('cnicInput').value.trim();
+        var service = document.getElementById('serviceTypeInput').value;
+        var idData  = document.getElementById('idImageData').value;
+        var faceData= document.getElementById('faceImageData').value;
+        var consent = document.getElementById('consentGiven').value;
+
+        if (!cnic)    { e.preventDefault(); alert('❌ Please enter your CNIC number'); return; }
+        if (!service) { e.preventDefault(); alert('❌ Please select your service type'); return; }
+        if (consent !== 'true') {
+            e.preventDefault(); alert('❌ Please complete identity verification'); return;
+        }
+        if (!idData) {
+            e.preventDefault(); alert('❌ ID document photo is required'); return;
+        }
+        if (!faceData) {
+            e.preventDefault(); alert('❌ Face/selfie photo is required'); return;
+        }
+    }
+});
+</script>
 </body>
 </html>

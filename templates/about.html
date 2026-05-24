@@ -2,156 +2,686 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - HouseHold Hero</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        /* --- NEW NAVBAR HOVER EFFECT --- */
-        .nav-link {
-            transition: all 0.3s ease;
-            padding: 8px 20px !important;
-            border-radius: 25px;
+        :root {
+            --brand-blue: #0062cc;
+            --brand-dark: #0f172a;
+            --brand-accent: #0096ff;
         }
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2); 
-            transform: translateY(-2px); /* Thora upar uthega */
-            color: #fff !important;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .nav-link.active {
-            background-color: white;
-            color: #0062cc !important;
-            font-weight: bold;
-        }
-        
-        /* --- FOOTER CSS --- */
-        footer {
-            background: #212529;
-            color: #aaa;
-            padding: 60px 0 20px 0;
-            margin-top: auto;
-        }
-        .footer-title {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .footer-link {
-            color: #aaa;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-            transition: 0.3s;
-        }
-        .footer-link:hover {
-            color: white;
-            padding-left: 5px;
-        }
-        
-        /* Body Flex for Sticky Footer */
+
+        * { box-sizing: border-box; }
+
         body {
+            font-family: 'Poppins', sans-serif;
+            background: #f9fbfd;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            margin: 0;
+        }
+
+        /* =============================================
+           FLOATING PILL NAVBAR (same as landing)
+        ============================================= */
+        .navbar-wrap {
+            position: sticky;
+            top: 16px;
+            z-index: 1050;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .navbar-pill {
+            background: #0f172a;
+            border-radius: 60px;
+            padding: 10px 10px 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+            max-width: 960px;
+            margin: 0 auto;
+            pointer-events: all;
+            gap: 8px;
+        }
+
+        .navbar-pill .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--brand-blue);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .pill-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .pill-nav-links a {
+            color: rgba(255,255,255,0.78);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 7px 14px;
+            border-radius: 30px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pill-nav-links a:hover,
+        .pill-nav-links a.active {
+            color: #fff;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .pill-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .pill-contact-btn {
+            background: white;
+            color: #0f172a;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .pill-contact-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+        .pill-hamburger {
+            display: none;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .pill-hamburger:hover { background: rgba(255,255,255,0.2); }
+
+        .pill-mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.98);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .pill-mobile-menu.open { display: flex; }
+        .pill-mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 10px 40px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+        .pill-mobile-menu a:hover { background: rgba(255,255,255,0.1); }
+        .pill-mobile-close {
+            position: absolute;
+            top: 24px; right: 24px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .pill-nav-links, .pill-contact-btn { display: none; }
+            .pill-hamburger { display: flex; }
+            .brand-name { font-size: 0.88rem; }
+            .navbar-wrap { top: 10px; padding: 0 12px; }
+        }
+
+        /* =============================================
+           PAGE HERO BANNER
+        ============================================= */
+        .page-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #0062cc 100%);
+            padding: 120px 0 80px 0;
+            margin-top: -70px;
+            padding-top: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -100px; right: -100px;
+            width: 500px; height: 500px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -80px;
+            width: 350px; height: 350px;
+            background: rgba(0,150,255,0.1);
+            border-radius: 50%;
+        }
+
+        .page-hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #93c5fd;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        /* =============================================
+           CONTENT SECTIONS
+        ============================================= */
+        .section-padding { padding: 90px 0; }
+
+        .section-title {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 2.2rem;
+        }
+
+        .section-line {
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, #0062cc, #0096ff);
+            border-radius: 10px;
+            margin: 14px 0 24px 0;
+        }
+
+        /* Mission image */
+        .mission-img-wrap {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.13);
+            transform: perspective(900px) rotateY(5deg);
+            transition: transform 0.4s ease;
+        }
+
+        .mission-img-wrap:hover { transform: perspective(900px) rotateY(1deg); }
+
+        .mission-img-wrap img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .mission-stat-card {
+            position: absolute;
+            bottom: 24px;
+            right: -20px;
+            background: white;
+            border-radius: 18px;
+            padding: 16px 22px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+            text-align: center;
+            min-width: 120px;
+        }
+
+        /* Values cards */
+        .value-card {
+            background: white;
+            border-radius: 24px;
+            padding: 36px 28px;
+            border: 1px solid #e8f0fe;
+            transition: all 0.35s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, transparent, rgba(0,98,204,0.04));
+            border-radius: 80px 0 0 0;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            border-color: #bdd7ff;
+        }
+
+        .value-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        /* Team cards */
+        .team-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            border: 1px solid #e8f0fe;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 48px rgba(0,0,0,0.1);
+        }
+
+        .team-avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            margin: 0 auto 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0062cc, #0096ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(0,98,204,0.3);
+        }
+
+        .timeline-content {
+            padding-top: 8px;
+        }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        footer {
+            background: linear-gradient(180deg, #0f172a 0%, #0a1120 100%);
+            color: #94a3b8;
+            padding: 80px 0 36px 0;
+            border-top: 1px solid #1e293b;
+            margin-top: auto;
+        }
+
+        .footer-title { color: white; font-weight: 700; margin-bottom: 24px; font-size: 1rem; }
+        .footer-link { color: #94a3b8; text-decoration: none; display: block; margin-bottom: 12px; transition: 0.3s; font-size: 0.9rem; }
+        .footer-link:hover { color: white; padding-left: 5px; }
+
+        .footer-social a {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-right: 8px;
+        }
+        .footer-social a:hover { background: var(--brand-blue); color: white; }
+
+        @media (max-width: 767px) {
+            .page-hero { padding-top: 100px; }
+            .mission-img-wrap { transform: none; }
+            .mission-stat-card { right: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(90deg, #0062cc, #0096ff); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="/">
-                <i class="fas fa-hammer"></i> HouseHold Hero
+    <!-- FLOATING PILL NAVBAR -->
+    <div class="navbar-wrap">
+        <div class="navbar-pill">
+            <a class="brand" href="/">
+                <div class="brand-icon"><i class="fas fa-hammer"></i></div>
+                <span class="brand-name">HouseHold Hero</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <ul class="pill-nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about" class="active">About Us</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-                <div class="offcanvas-header bg-primary text-white">
-                    <h5 class="offcanvas-title fw-bold"><i class="fas fa-bars me-2"></i> Menu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-                </div>
-
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
-                        <li class="nav-item"><a class="nav-link mx-1" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link active mx-1" href="/about">About Us</a></li>
-                        <li class="nav-item"><a class="nav-link mx-1" href="/contact">Contact Us</a></li>
-                        <li class="nav-item d-lg-none w-100 my-2"><hr></li>
-                    </ul>
-                    
-                    <div class="d-flex justify-content-center">
-                        <a href="/login" class="btn btn-light text-primary rounded-pill px-4 fw-bold shadow-sm me-2">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                        <a href="/signup" class="btn btn-outline-light rounded-pill px-4 fw-bold">Register</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div class="bg-light py-5 text-center">
-        <div class="container">
-            <h1 class="fw-bold text-primary">About HouseHold Hero</h1>
-            <p class="text-muted lead">Empowering Homes, Connecting Professionals.</p>
-        </div>
-    </div>
-
-    <div class="container py-5">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <img src="https://img.freepik.com/free-vector/teamwork-concept-landing-page_52683-20165.jpg" class="img-fluid rounded shadow" alt="About Us">
-            </div>
-            <div class="col-md-6 mt-4 mt-md-0">
-                <h3 class="fw-bold mb-3">Our Mission</h3>
-                <p class="text-muted">
-                    Welcome to <strong>HouseHold Hero</strong>, Pakistan's most trusted platform for connecting skilled daily-wage professionals with households. We understand the struggle of finding a reliable electrician, plumber, or technician when you need them the most.
-                </p>
-                <p class="text-muted">
-                    Our mission is simple: <strong>To bridge the gap between skill and need.</strong> We provide a digital identity to thousands of skilled workers, allowing them to showcase their expertise and earn a respectable livelihood without paying heavy commissions to middlemen.
-                </p>
+            <div class="pill-nav-right">
+                <a href="/login" class="pill-contact-btn"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                <a href="/signup" style="background: linear-gradient(135deg, #0062cc, #0096ff); color: white; border: none; border-radius: 30px; padding: 8px 18px; font-weight: 700; font-size: 0.82rem; text-decoration: none; white-space: nowrap;">Register</a>
+                <button class="pill-hamburger" onclick="document.getElementById('pillMobileMenu').classList.add('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </div>
 
-    <footer>
+    <!-- Mobile Menu -->
+    <div id="pillMobileMenu" class="pill-mobile-menu">
+        <button class="pill-mobile-close" onclick="document.getElementById('pillMobileMenu').classList.remove('open')"><i class="fas fa-times"></i></button>
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/login" style="color: #93c5fd;">Login</a>
+        <a href="/signup" style="background: linear-gradient(135deg, #0062cc, #0096ff); color: white; padding: 12px 40px;">Register</a>
+    </div>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero text-center text-white">
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="page-hero-badge">Our Story</div>
+            <h1 class="fw-800 mb-3" style="font-size: 3rem; font-weight: 800;">About HouseHold Hero</h1>
+            <p class="opacity-75 mx-auto" style="max-width: 560px; font-size: 1.1rem; line-height: 1.8;">
+                Pakistan's most trusted platform empowering homes and skilled professionals — built right here in Karachi.
+            </p>
+        </div>
+    </div>
+
+    <!-- MISSION SECTION -->
+    <section class="section-padding">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h4 class="footer-title">HouseHold Hero</h4>
-                    <p>Connecting households with skilled professionals. Safe, Fast, and Reliable.</p>
-                    <div>
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+            <div class="row align-items-center g-5">
+                <div class="col-md-6">
+                    <div class="mission-img-wrap">
+                        <img src="https://img.freepik.com/free-vector/teamwork-concept-landing-page_52683-20165.jpg" alt="Our Mission">
+                        <div class="mission-stat-card">
+                            <div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #0062cc, #0096ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">500+</div>
+                            <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase;">Verified Pros</div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5 class="footer-title">Quick Links</h5>
-                    <a href="/login" class="footer-link">Login</a>
-                    <a href="/signup" class="footer-link">Register</a>
-                    <a href="/about" class="footer-link">About Us</a>
-                    <a href="/contact" class="footer-link">Contact</a>
+                <div class="col-md-6">
+                    <div class="page-hero-badge" style="background: #eff6ff; border-color: #bdd7ff; color: #0062cc;">Our Mission</div>
+                    <h2 class="section-title mt-2">Bridging Skill & Need</h2>
+                    <div class="section-line"></div>
+                    <p class="text-muted mb-4" style="line-height: 1.9;">
+                        Welcome to <strong>HouseHold Hero</strong>, Pakistan's most trusted platform for connecting skilled daily-wage professionals with households. We understand the struggle of finding a reliable electrician, plumber, or technician when you need them the most.
+                    </p>
+                    <p class="text-muted" style="line-height: 1.9;">
+                        Our mission is simple: <strong>To bridge the gap between skill and need.</strong> We provide a digital identity to thousands of skilled workers, allowing them to showcase their expertise and earn a respectable livelihood — without paying heavy commissions to middlemen.
+                    </p>
+                    <div class="d-flex gap-4 mt-4 flex-wrap">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 800; color: #0062cc;">1,200+</div>
+                            <div style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Happy Customers</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 800; color: #0062cc;">4.8 ⭐</div>
+                            <div style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Avg. Rating</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 800; color: #0062cc;">0%</div>
+                            <div style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Commission</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUR VALUES -->
+    <section class="section-padding" style="background: #f8faff;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="page-hero-badge" style="background: #eff6ff; border: 1px solid #bdd7ff; color: #0062cc;">What We Stand For</div>
+                <h2 class="section-title mt-2">Our Core Values</h2>
+                <div class="section-line mx-auto"></div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon" style="background: #eff6ff;">
+                            <i class="fas fa-shield-alt" style="color: #0062cc;"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Trust & Safety</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.92rem; line-height: 1.8;">Every professional is CNIC-verified. We take trust seriously because your home is your sanctuary.</p>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <h5 class="footer-title">Contact Us</h5>
-                    <p><i class="fas fa-envelope me-2"></i> saadkh0211@gmail.com</p>
-                    <p><i class="fas fa-phone me-2"></i> +92 343 2106570</p>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> Karachi, Pakistan</p>
+                    <div class="value-card">
+                        <div class="value-icon" style="background: #f0fdf4;">
+                            <i class="fas fa-handshake" style="color: #059669;"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Fair & Transparent</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.92rem; line-height: 1.8;">Zero commission model. Workers keep 100% of their earnings. Customers pay what's agreed — nothing extra.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon" style="background: #fefce8;">
+                            <i class="fas fa-users" style="color: #d97706;"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Community First</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.92rem; line-height: 1.8;">We exist to uplift local communities — giving dignified work to skilled tradespeople across Karachi.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon" style="background: #fdf4ff;">
+                            <i class="fas fa-bolt" style="color: #9333ea;"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Speed & Simplicity</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.92rem; line-height: 1.8;">Find a professional in under 5 minutes. No lengthy forms, no waiting days for a callback.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon" style="background: #fff1f2;">
+                            <i class="fas fa-star" style="color: #e11d48;"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Quality Assured</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.92rem; line-height: 1.8;">Real ratings from real customers. Our community feedback system keeps standards high for everyone.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="value-card">
+                        <div class="value-icon" style="background: #f0fdf4;">
+                            <i class="fas fa-map-marker-alt" style="color: #16a34a;"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Locally Focused</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.92rem; line-height: 1.8;">Built specifically for Pakistan's urban households — we understand local needs, culture, and challenges.</p>
+                    </div>
                 </div>
             </div>
-            <hr class="mt-4" style="opacity: 0.1;">
-            <div class="text-center small">
+        </div>
+    </section>
+
+    <!-- OUR JOURNEY / TIMELINE -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-hero-badge" style="background: #eff6ff; border: 1px solid #bdd7ff; color: #0062cc;">How We Started</div>
+                    <h2 class="section-title mt-2 mb-4">Our Journey</h2>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot">2024</div>
+                        <div class="timeline-content">
+                            <h6 class="fw-bold mb-1">The Problem Discovered</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.9rem;">Frustrated with unreliable household workers in Karachi, our founder Saad Khan set out to build a better system.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot">2025</div>
+                        <div class="timeline-content">
+                            <h6 class="fw-bold mb-1">Platform Built & Launched</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.9rem;">HouseHold Hero went live with 50 verified professionals and quickly grew to serve hundreds of households.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item" style="margin-bottom: 0;">
+                        <div class="timeline-dot">2026</div>
+                        <div class="timeline-content">
+                            <h6 class="fw-bold mb-1">Growing Every Day</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.9rem;">Today, 500+ verified pros and 1,200+ satisfied customers trust HouseHold Hero for every home service need.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div style="background: linear-gradient(135deg, #0f172a, #0c2461); border-radius: 28px; padding: 48px 36px; color: white; box-shadow: 0 24px 64px rgba(0,0,0,0.16);">
+                        <h3 class="fw-bold mb-2" style="font-size: 1.6rem;">Meet the Founder</h3>
+                        <div style="width: 40px; height: 3px; background: linear-gradient(90deg, #0096ff, #0062cc); border-radius: 4px; margin-bottom: 20px;"></div>
+                        <div class="d-flex align-items-center gap-4 mb-4">
+                            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0062cc, #0096ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; color: white; flex-shrink: 0;">S</div>
+                            <div>
+                                <h5 class="fw-bold mb-0">Saad Khan</h5>
+                                <span style="color: #93c5fd; font-size: 0.85rem;">Founder & Developer</span>
+                            </div>
+                        </div>
+                        <p style="color: #94a3b8; line-height: 1.8; font-size: 0.92rem;">
+                            Saad is a passionate developer from Karachi who built HouseHold Hero to solve a real problem he faced daily. His vision: give every skilled worker a digital identity and every household a trusted helper.
+                        </p>
+                        <div class="d-flex gap-3 mt-4">
+                            <div style="background: rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 16px; text-align: center; flex: 1;">
+                                <div style="font-weight: 800; color: white; font-size: 1.3rem;">500+</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8;">Professionals</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 16px; text-align: center; flex: 1;">
+                                <div style="font-weight: 800; color: white; font-size: 1.3rem;">1,200+</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8;">Customers</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 16px; text-align: center; flex: 1;">
+                                <div style="font-weight: 800; color: white; font-size: 1.3rem;">4.8⭐</div>
+                                <div style="font-size: 0.72rem; color: #94a3b8;">Rating</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section-padding" style="background: #f8faff;">
+        <div class="container">
+            <div style="background: linear-gradient(135deg, #0062cc 0%, #0096ff 100%); border-radius: 28px; padding: 60px 40px; text-align: center; box-shadow: 0 20px 60px rgba(0,98,204,0.3); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+                <h2 class="text-white fw-bold mb-3" style="font-size: 2rem; position: relative; z-index: 1;">Ready to Experience the Difference?</h2>
+                <p class="text-white opacity-75 mb-4" style="position: relative; z-index: 1;">Join Pakistan's fastest growing home services platform today.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap" style="position: relative; z-index: 1;">
+                    <a href="/signup" style="background: white; color: #0062cc; border-radius: 50px; padding: 14px 36px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">Get Started Free</a>
+                    <a href="/contact" style="background: rgba(255,255,255,0.15); color: white; border: 2px solid rgba(255,255,255,0.4); border-radius: 50px; padding: 14px 36px; font-weight: 700; text-decoration: none;">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="row text-start">
+                <div class="col-md-4 mb-5">
+                    <h4 class="footer-title" style="font-size: 1.3rem;"><i class="fas fa-hammer text-primary me-2"></i>HouseHold Hero</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.8;">Connecting households with skilled professionals. Safe, Fast, and Reliable — right in Karachi.</p>
+                    <div class="footer-social mt-3">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5 ps-md-5">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/about" class="footer-link">About Us</a>
+                    <a href="/contact" class="footer-link">Contact Us</a>
+                    <a href="/login" class="footer-link">Login</a>
+                    <a href="/signup" class="footer-link">Register</a>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="footer-title">Contact Us</h5>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-envelope me-2 text-primary"></i> saadkh0211@gmail.com</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-phone me-2 text-primary"></i> +92 343 2106570</p>
+                    <p style="font-size: 0.9rem;"><i class="fas fa-map-marker-alt me-2 text-primary"></i> Karachi, Pakistan</p>
+                </div>
+            </div>
+            <hr style="border-color: #1e293b; opacity: 1; margin: 0 0 24px 0;">
+            <div class="text-center" style="font-size: 0.82rem; opacity: 0.5;">
                 &copy; 2026 HouseHold Hero by Saad Khan. All Rights Reserved.
             </div>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

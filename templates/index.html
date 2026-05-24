@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <style>
-        /* --- Dashboard Specific CSS --- */
         body {
             background-color: #f4f7f6;
             font-family: 'Poppins', sans-serif;
@@ -19,27 +18,117 @@
             flex-direction: column;
             min-height: 100vh;
         }
+        /* ── PILL NAVBAR ── */
+        .navbar-wrap {
+            position: sticky;
+            top: 16px;
+            z-index: 1050;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+        .navbar-pill {
+            background: #0f172a;
+            border-radius: 60px;
+            padding: 10px 10px 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+            max-width: 980px;
+            margin: 0 auto;
+            pointer-events: all;
+            gap: 8px;
+        }
+        .navbar-pill .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .brand-icon {
+            width: 38px; height: 38px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: #0062cc; flex-shrink: 0;
+        }
+        .brand-name { color: white; font-weight: 700; font-size: 1rem; white-space: nowrap; }
 
-        /* --- NEW NAVBAR STYLES --- */
-        .navbar-dashboard {
-            background: linear-gradient(90deg, #0056b3, #0096ff);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .pill-nav-links {
+            display: flex; align-items: center; gap: 4px;
+            list-style: none; margin: 0; padding: 0;
         }
-        .nav-link {
-            transition: all 0.3s ease;
-            padding: 8px 20px !important;
-            border-radius: 25px;
-            color: rgba(255,255,255,0.9) !important;
+        .pill-nav-links a {
+            color: rgba(255,255,255,0.78);
+            text-decoration: none; font-weight: 600; font-size: 0.88rem;
+            padding: 7px 14px; border-radius: 30px;
+            transition: all 0.25s ease; white-space: nowrap;
         }
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            color: #fff !important;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .pill-nav-links a:hover, .pill-nav-links a.active {
+            color: #fff; background: rgba(255,255,255,0.12);
         }
-        
-        /* --- HEADER & CARDS --- */
+        .pill-nav-right {
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+        }
+
+        /* notification bell in pill style */
+        .pill-bell-btn {
+            background: rgba(255,255,255,0.1);
+            border: none; color: white;
+            border-radius: 50%; width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; position: relative; transition: background 0.2s;
+            text-decoration: none;
+        }
+        .pill-bell-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+
+        .pill-welcome {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.84rem; white-space: nowrap;
+        }
+        .pill-logout-btn {
+            background: white; color: #0f172a;
+            border: none; border-radius: 30px;
+            padding: 8px 18px; font-weight: 700; font-size: 0.82rem;
+            text-decoration: none; transition: all 0.25s ease; white-space: nowrap;
+        }
+        .pill-logout-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+        /* hamburger for mobile */
+        .pill-hamburger {
+            display: none;
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            border-radius: 50%; width: 36px; height: 36px;
+            align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.9rem; transition: background 0.2s;
+        }
+        .pill-hamburger:hover { background: rgba(255,255,255,0.2); }
+
+        .pill-mobile-menu {
+            display: none; position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.98); z-index: 2000;
+            flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+        }
+        .pill-mobile-menu.open { display: flex; }
+        .pill-mobile-menu a {
+            color: white; text-decoration: none;
+            font-size: 1.3rem; font-weight: 700;
+            padding: 10px 40px; border-radius: 30px; transition: background 0.2s;
+        }
+        .pill-mobile-menu a:hover { background: rgba(255,255,255,0.1); }
+        .pill-mobile-close {
+            position: absolute; top: 24px; right: 24px;
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            width: 42px; height: 42px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .pill-nav-links, .pill-welcome { display: none; }
+            .pill-hamburger { display: flex; }
+            .brand-name { font-size: 0.88rem; }
+            .navbar-wrap { top: 10px; padding: 0 12px; }
+        }
         .dashboard-header {
             background: white;
             padding: 40px 20px;
@@ -47,7 +136,7 @@
             margin-bottom: 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             text-align: center;
-            margin-top: -30px;
+            margin-top: 20px;
             position: relative;
             z-index: 10;
         }
@@ -98,8 +187,6 @@
             margin: 0 auto 10px auto;
             backdrop-filter: blur(5px);
         }
-
-        /* --- FOOTER CSS --- */
         footer {
             background: #212529;
             color: #aaa;
@@ -126,40 +213,78 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-dashboard">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="#">
-                <i class="fas fa-hammer"></i> HouseHold Hero
+    <!-- PILL NAVBAR -->
+    <div class="navbar-wrap">
+        <div class="navbar-pill">
+            <a class="brand" href="/dashboard">
+                <div class="brand-icon"><i class="fas fa-hammer"></i></div>
+                <span class="brand-name">HouseHold Hero</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <ul class="pill-nav-links">
+                <li><a href="/dashboard" class="active">Dashboard</a></li>
+                <li><a href="/manage-bookings"><i class="fas fa-calendar-check me-1"></i>Bookings</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-                <div class="offcanvas-header bg-primary text-white">
-                    <h5 class="offcanvas-title fw-bold"><i class="fas fa-bars me-2"></i> Menu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-                </div>
-
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 align-items-center">
-                        <li class="nav-item"><a class="nav-link mx-1" href="/dashboard">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link mx-1" href="/about">About Us</a></li>
-                        <li class="nav-item"><a class="nav-link mx-1" href="/contact">Contact Us</a></li>
-                        <li class="nav-item d-lg-none w-100 my-2"><hr></li>
+            <div class="pill-nav-right">
+                <!-- Bell notification -->
+                <div class="dropdown position-relative">
+                    <button class="pill-bell-btn" type="button" id="bellDropdown" data-bs-toggle="dropdown" aria-expanded="false" onclick="clearNotifBadge()">
+                        <i class="fas fa-bell"></i>
+                        {% if unread_count and unread_count > 0 %}
+                            <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger p-1" style="font-size: 0.6rem;">{{ unread_count }}</span>
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg mt-2 p-0 border-0 rounded-3" aria-labelledby="bellDropdown" style="width: 320px; max-height: 400px; overflow-y: auto; z-index: 2000;">
+                        <li class="p-3 border-bottom bg-light rounded-top-3">
+                            <h6 class="mb-0 fw-bold"><i class="fas fa-bell text-primary me-2"></i> Notifications</h6>
+                        </li>
+                        {% if notifications %}
+                            {% for notif in notifications %}
+                                <li class="p-3 border-bottom small {% if notif.is_read == 0 %}bg-light fw-bold{% endif %}" style="white-space: normal;">
+                                    <div class="d-flex align-items-start">
+                                        <div class="me-2 text-primary mt-1">
+                                            <i class="fas {% if '🎉' in notif.message or 'approved' in notif.message %}fa-check-circle text-success{% elif '❌' in notif.message %}fa-times-circle text-danger{% else %}fa-info-circle{% endif %}"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-dark">{{ notif.message }}</span>
+                                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
+                                                {{ notif.created_at.strftime('%d %b, %I:%M %p') if notif.created_at else '' }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="p-4 text-center text-muted small">Koi new notifications nahi hain.</li>
+                        {% endif %}
                     </ul>
-                    
-                    <div class="d-flex justify-content-center align-items-center">
-                        <span class="text-white me-3 d-none d-lg-block">Welcome, <strong>{{ session.name }}</strong></span>
-                        <a href="/logout" class="btn btn-light text-primary rounded-pill px-4 fw-bold shadow-sm">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
-                    </div>
                 </div>
+
+                <span class="pill-welcome d-none d-lg-block">Welcome, <strong>{{ session.name }}</strong></span>
+                <a href="/logout" class="pill-logout-btn">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
+                <button class="pill-hamburger" onclick="document.getElementById('pillMobileMenu').classList.add('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
-    </nav>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="pillMobileMenu" class="pill-mobile-menu">
+        <button class="pill-mobile-close" onclick="document.getElementById('pillMobileMenu').classList.remove('open')">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/manage-bookings">Bookings</a>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/logout" style="background: linear-gradient(135deg, #0062cc, #0096ff); color: white; padding: 12px 40px;">Logout</a>
+    </div>
 
     <div class="container mt-4">
 
@@ -197,7 +322,7 @@
                                     <img src="{{ url_for('static', filename='uploads/' + provider.profile_pic) }}" 
                                          alt="{{ provider.name }}" 
                                          style="width: 100%; height: 100%; object-fit: cover;"
-                                         onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+                                         onerror="this.src='/static/uploads/default.jpg';">
                                 {% else %}
                                     <img src="{{ url_for('static', filename='uploads/default.jpg') }}" 
                                          alt="Default" 
@@ -216,6 +341,14 @@
                                     {{ provider.location if provider.location else 'Location N/A' }}
                                 </span>
                             </div>
+
+                            {% if provider.distance is not none %}
+                            <div class="mb-3">
+                                <span class="badge bg-success text-white shadow-sm rounded-pill px-3 py-2 small">
+                                    <i class="fas fa-route me-1"></i> {{ provider.distance }} KM away
+                                </span>
+                            </div>
+                            {% endif %}
 
                             <div class="rating-box mb-3">
                                 {% if provider.rating and provider.rating >= 4.5 %}
@@ -243,7 +376,7 @@
                                 </div>
                             </div>
                             
-                            {% if session.role == 'seeker' %}
+                            {% if session.role == 'seeker' and provider.can_rate %}
                             <div class="mt-3 p-2 border rounded bg-light">
                                 <form action="/submit_rating" method="POST" class="d-flex align-items-center justify-content-between">
                                     <input type="hidden" name="provider_id" value="{{ provider.id }}">
@@ -262,9 +395,51 @@
 
                             <hr style="opacity: 0.1; margin: 20px 0;">
 
+                            {% if session.role == 'seeker' %}
+                            <button type="button" class="btn btn-primary rounded-pill w-100 fw-bold mb-2 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#bookModal{{ provider.id }}">
+                                <i class="fas fa-calendar-plus me-1"></i> Book Service Now
+                            </button>
+                            {% endif %}
+
                             <a href="{{ provider.whatsapp_link }}" target="_blank" class="btn btn-whatsapp-premium">
                                 <i class="fab fa-whatsapp fa-lg me-2"></i> Chat on WhatsApp
                             </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="bookModal{{ provider.id }}" tabindex="-1" style="z-index: 1060;">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="border-radius: 16px; overflow: hidden;">
+                            <div class="modal-header bg-primary text-white border-0">
+                                <h5 class="modal-title fw-bold"><i class="fas fa-file-signature"></i> Hire {{ provider.name }}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <form action="/create-booking" method="POST">
+                                <input type="hidden" name="provider_id" value="{{ provider.id }}">
+                                <div class="modal-body p-4">
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Preferred Date</label>
+                                        <input type="date" name="booking_date" class="form-control" style="border-radius: 10px;" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Preferred Time Slot</label>
+                                        <select name="booking_time" class="form-select" style="border-radius: 10px;" required>
+                                            <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                                            <option value="Afternoon (12 PM - 4 PM)">Afternoon (12 PM - 4 PM)</option>
+                                            <option value="Evening (4 PM - 8 PM)">Evening (4 PM - 8 PM)</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Job Work Description</label>
+                                        <textarea name="job_description" class="form-control" rows="3" placeholder="Please type your requirement details..." style="border-radius: 10px;" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer bg-light border-0 p-3">
+                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Confirm Booking</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -276,7 +451,7 @@
                         <i class="fas fa-search fa-4x text-muted mb-3"></i>
                         <h3 class="text-danger fw-bold">No Professionals Found!</h3>
                         <p class="text-muted fs-5">
-                            Sorry, we currently don't have any <strong>"{{ search_query }}"</strong> available. <br>
+                            Sorry, we currently don't have any <strong>"{{ search_query if search_query else '' }}"</strong> available. <br>
                             Please check back later or try searching for something else like <em>Electrician, Plumber, or Carpenter.</em>
                         </p>
                         <a href="/dashboard" class="btn btn-primary rounded-pill px-4 mt-3">Show All Providers</a>
@@ -319,25 +494,45 @@
             </div>
         </div>
     </footer>
-    <div class="chat-btn" onclick="toggleChat()"><i class="fas fa-comment-dots"></i></div>
-    <div class="chat-box" id="chatBox">
-        <div class="chat-header"><span>🤖 Help Assistant</span><i class="fas fa-times" style="cursor: pointer;" onclick="toggleChat()"></i></div>
-        <div class="chat-body" id="chatBody"><div class="msg bot-msg">Hello! Main apki madad kaise kar sakta hoon?</div></div>
-        <div class="chat-footer"><input type="text" id="userInput" class="chat-input" placeholder="Type a message..." onkeypress="handleEnter(event)"></div>
-    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        function toggleChat() { var box = document.getElementById("chatBox"); box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none"; }
-        function handleEnter(e) { if (e.key === "Enter") sendMessage(); }
-        function sendMessage() {
-            var input = document.getElementById("userInput"); var message = input.value.trim(); if (message === "") return;
-            var chatBody = document.getElementById("chatBody");
-            chatBody.innerHTML += `<div class="msg user-msg">${message}</div>`; input.value = ""; chatBody.scrollTop = chatBody.scrollHeight;
-            var formData = new FormData(); formData.append("msg", message);
-            fetch("/get_bot_response", { method: "POST", body: formData }).then(r => r.text()).then(d => {
-                chatBody.innerHTML += `<div class="msg bot-msg">${d}</div>`; chatBody.scrollTop = chatBody.scrollHeight;
-            });
+        function getLiveLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (!urlParams.has('lat') || !urlParams.has('lng')) {
+                        urlParams.set('lat', lat);
+                        urlParams.set('lng', lng);
+                        window.location.search = urlParams.toString();
+                    }
+                }, function(error) {
+                    console.log("GPS Location access denied or device error occurred.");
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            getLiveLocation();
+        });
+
+        function clearNotifBadge() {
+            fetch('/mark-notifications-read', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    const badge = document.getElementById('notifBadge');
+                    if(badge) badge.style.display = 'none';
+                }
+            })
+            .catch(err => console.error("Notification clear error:", err));
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% include 'chatbot.html' %}
 </body> 
 </html>
